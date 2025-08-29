@@ -1,0 +1,116 @@
+{
+  "metadata": {
+    "description": "Dados de exemplo para o aplicativo CEFOPE - Formação de Professores",
+    "created_at": "2025-08-29",
+    "version": "1.0.0",
+    "source": "Dados simulados para demonstração"
+  },
+  "datasets": {
+    "evolucao_temporal": {
+      "description": "Evolução dos indicadores ao longo do tempo (2015-2025)",
+      "columns": {
+        "Ano": "Ano de referência",
+        "Matriculas": "Número total de matrículas",
+        "Formacoes_Concluidas": "Número de formações concluídas",
+        "Cursos_Ativos": "Número de cursos ativos",
+        "Taxa_Conclusao": "Taxa de conclusão em percentual",
+        "Satisfacao_Media": "Satisfação média dos alunos (escala 1-5)"
+      },
+      "data": [
+        {"Ano": 2015, "Matriculas": 3200, "Formacoes_Concluidas": 2800, "Cursos_Ativos": 45, "Taxa_Conclusao": 87.5, "Satisfacao_Media": 4.1},
+        {"Ano": 2016, "Matriculas": 3500, "Formacoes_Concluidas": 3100, "Cursos_Ativos": 52, "Taxa_Conclusao": 88.6, "Satisfacao_Media": 4.2},
+        {"Ano": 2017, "Matriculas": 3800, "Formacoes_Concluidas": 3400, "Cursos_Ativos": 58, "Taxa_Conclusao": 89.5, "Satisfacao_Media": 4.3},
+        {"Ano": 2018, "Matriculas": 4200, "Formacoes_Concluidas": 3800, "Cursos_Ativos": 65, "Taxa_Conclusao": 90.5, "Satisfacao_Media": 4.4},
+        {"Ano": 2019, "Matriculas": 4600, "Formacoes_Concluidas": 4200, "Cursos_Ativos": 72, "Taxa_Conclusao": 91.3, "Satisfacao_Media": 4.5},
+        {"Ano": 2020, "Matriculas": 5100, "Formacoes_Concluidas": 4700, "Cursos_Ativos": 79, "Taxa_Conclusao": 92.2, "Satisfacao_Media": 4.6},
+        {"Ano": 2021, "Matriculas": 5700, "Formacoes_Concluidas": 5200, "Cursos_Ativos": 87, "Taxa_Conclusao": 91.2, "Satisfacao_Media": 4.5},
+        {"Ano": 2022, "Matriculas": 6300, "Formacoes_Concluidas": 5800, "Cursos_Ativos": 95, "Taxa_Conclusao": 92.1, "Satisfacao_Media": 4.6},
+        {"Ano": 2023, "Matriculas": 6900, "Formacoes_Concluidas": 6400, "Cursos_Ativos": 103, "Taxa_Conclusao": 92.8, "Satisfacao_Media": 4.7},
+        {"Ano": 2024, "Matriculas": 7500, "Formacoes_Concluidas": 7000, "Cursos_Ativos": 112, "Taxa_Conclusao": 93.3, "Satisfacao_Media": 4.7},
+        {"Ano": 2025, "Matriculas": 8200, "Formacoes_Concluidas": 7600, "Cursos_Ativos": 121, "Taxa_Conclusao": 92.7, "Satisfacao_Media": 4.8}
+      ]
+    },
+    "regioes_geograficas": {
+      "description": "Indicadores por região geográfica do Brasil",
+      "columns": {
+        "Regiao": "Região do Brasil",
+        "Professores_Formados": "Total de professores formados",
+        "Cursos_Ativos": "Número de cursos ativos",
+        "Instituicoes_Parceiras": "Número de instituições parceiras",
+        "Taxa_Conclusao": "Taxa de conclusão em percentual",
+        "Satisfacao_Media": "Satisfação média dos alunos (escala 1-5)"
+      },
+      "data": [
+        {"Regiao": "Norte", "Professores_Formados": 850, "Cursos_Ativos": 23, "Instituicoes_Parceiras": 12, "Taxa_Conclusao": 85.2, "Satisfacao_Media": 4.3},
+        {"Regiao": "Nordeste", "Professores_Formados": 2100, "Cursos_Ativos": 45, "Instituicoes_Parceiras": 28, "Taxa_Conclusao": 88.7, "Satisfacao_Media": 4.5},
+        {"Regiao": "Centro-Oeste", "Professores_Formados": 1200, "Cursos_Ativos": 28, "Instituicoes_Parceiras": 18, "Taxa_Conclusao": 87.3, "Satisfacao_Media": 4.4},
+        {"Regiao": "Sudeste", "Professores_Formados": 4500, "Cursos_Ativos": 89, "Instituicoes_Parceiras": 45, "Taxa_Conclusao": 89.1, "Satisfacao_Media": 4.6},
+        {"Regiao": "Sul", "Professores_Formados": 3200, "Cursos_Ativos": 67, "Instituicoes_Parceiras": 32, "Taxa_Conclusao": 91.2, "Satisfacao_Media": 4.7}
+      ]
+    },
+    "programas_formacao": {
+      "description": "Detalhamento dos programas de formação oferecidos",
+      "columns": {
+        "Programa": "Nome do programa de formação",
+        "Matriculas": "Número de matrículas atuais",
+        "Concluidos": "Número de alunos que concluíram",
+        "Taxa_Conclusao": "Taxa de conclusão em percentual",
+        "Satisfacao": "Satisfação média dos alunos (escala 1-5)",
+        "Empregabilidade": "Taxa de empregabilidade em percentual"
+      },
+      "data": [
+        {"Programa": "Licenciatura em Matemática", "Matriculas": 450, "Concluidos": 420, "Taxa_Conclusao": 93.3, "Satisfacao": 4.2, "Empregabilidade": 96.2},
+        {"Programa": "Licenciatura em Português", "Matriculas": 380, "Concluidos": 350, "Taxa_Conclusao": 92.1, "Satisfacao": 4.5, "Empregabilidade": 94.8},
+        {"Programa": "Pedagogia", "Matriculas": 520, "Concluidos": 480, "Taxa_Conclusao": 92.3, "Satisfacao": 4.7, "Empregabilidade": 97.1},
+        {"Programa": "Formação Continuada em História", "Matriculas": 280, "Concluidos": 250, "Taxa_Conclusao": 89.3, "Satisfacao": 4.3, "Empregabilidade": 93.5},
+        {"Programa": "Especialização em Educação Especial", "Matriculas": 320, "Concluidos": 290, "Taxa_Conclusao": 90.6, "Satisfacao": 4.6, "Empregabilidade": 95.2},
+        {"Programa": "Mestrado em Educação", "Matriculas": 180, "Concluidos": 160, "Taxa_Conclusao": 88.9, "Satisfacao": 4.8, "Empregabilidade": 98.5}
+      ]
+    },
+    "sazonalidade_mensal": {
+      "description": "Análise de sazonalidade mensal das matrículas",
+      "columns": {
+        "Mes": "Mês do ano",
+        "Matriculas": "Número de matrículas",
+        "Fator_Sazonal": "Fator de sazonalidade (média = 1.0)"
+      },
+      "data": [
+        {"Mes": "Jan", "Matriculas": 1200, "Fator_Sazonal": 1.2},
+        {"Mes": "Fev", "Matriculas": 1350, "Fator_Sazonal": 1.35},
+        {"Mes": "Mar", "Matriculas": 1100, "Fator_Sazonal": 1.1},
+        {"Mes": "Abr", "Matriculas": 980, "Fator_Sazonal": 0.98},
+        {"Mes": "Mai", "Matriculas": 850, "Fator_Sazonal": 0.85},
+        {"Mes": "Jun", "Matriculas": 720, "Fator_Sazonal": 0.72},
+        {"Mes": "Jul", "Matriculas": 680, "Fator_Sazonal": 0.68},
+        {"Mes": "Ago", "Matriculas": 750, "Fator_Sazonal": 0.75},
+        {"Mes": "Set", "Matriculas": 890, "Fator_Sazonal": 0.89},
+        {"Mes": "Out", "Matriculas": 1100, "Fator_Sazonal": 1.1},
+        {"Mes": "Nov", "Matriculas": 1250, "Fator_Sazonal": 1.25},
+        {"Mes": "Dez", "Matriculas": 1400, "Fator_Sazonal": 1.4}
+      ]
+    }
+  },
+  "indicadores_qualidade": {
+    "satisfacao_alunos": 4.6,
+    "taxa_empregabilidade": 95.8,
+    "reconhecimento_mec": "A+",
+    "indice_qualidade": 92.3
+  },
+  "metas_futuras": {
+    "2025": {
+      "matriculas_meta": 8500,
+      "taxa_conclusao_meta": 93.0,
+      "satisfacao_meta": 4.7
+    },
+    "2026": {
+      "matriculas_meta": 9200,
+      "taxa_conclusao_meta": 93.5,
+      "satisfacao_meta": 4.8
+    },
+    "2030": {
+      "matriculas_meta": 12000,
+      "taxa_conclusao_meta": 95.0,
+      "satisfacao_meta": 4.9
+    }
+  }
+}
