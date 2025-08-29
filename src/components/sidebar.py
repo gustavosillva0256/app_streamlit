@@ -23,14 +23,16 @@ def render_sidebar():
                 "Formação de Professores", 
                 "Estatísticas por Região",
                 "Evolução Temporal",
-                "Comparativos"
+                "Comparativos",
+                "Bases de Dados"
             ],
             icons=[
                 "house-fill",
                 "mortarboard-fill", 
                 "geo-alt-fill",
                 "graph-up",
-                "bar-chart-fill"
+                "bar-chart-fill",
+                "database-fill"
             ],
             menu_icon="cast",
             default_index=0,

@@ -19,6 +19,7 @@ from pages.formacao import render_formacao
 from pages.estatisticas import render_estatisticas
 from pages.evolucao import render_evolucao
 from pages.comparativos import render_comparativos
+from pages.bases_dados import render_bases_dados
 
 # Configuração da página
 st.set_page_config(
@@ -38,16 +39,18 @@ def main():
     selected_page = render_sidebar()
     
     # Renderiza a página selecionada
-    # if selected_page == "Dashboard":
-    #     render_dashboard()
-    # elif selected_page == "Formação de Professores":
-    #     render_formacao()
-    # elif selected_page == "Estatísticas por Região":
-    #     render_estatisticas()
-    # elif selected_page == "Evolução Temporal":
-    #     render_evolucao()
-    # elif selected_page == "Comparativos":
-    #     render_comparativos()
+    if selected_page == "Dashboard":
+        render_dashboard()
+    elif selected_page == "Formação de Professores":
+        render_formacao()
+    elif selected_page == "Estatísticas por Região":
+        render_estatisticas()
+    elif selected_page == "Evolução Temporal":
+        render_evolucao()
+    elif selected_page == "Comparativos":
+        render_comparativos()
+    elif selected_page == "Bases de Dados":
+        render_bases_dados()
 
 if __name__ == "__main__":
     main()
