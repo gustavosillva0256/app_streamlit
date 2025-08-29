@@ -20,10 +20,10 @@ def render_sidebar():
             menu_title=None,
             options=[
                 "Dashboard",
-                "Formação de Professores", 
-                "Estatísticas por Região",
-                "Evolução Temporal",
-                "Comparativos"
+                # "Formação de Professores", 
+                # "Estatísticas por Região",
+                # "Evolução Temporal",
+                # "Comparativos"
             ],
             icons=[
                 "house-fill",
@@ -50,27 +50,27 @@ def render_sidebar():
         
         st.markdown("---")
         
-        # Informações adicionais
-        st.markdown("""
-        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-top: 1rem;">
-            <h4 style="color: #1f77b4; margin: 0 0 0.5rem 0;">📊 Sobre o Projeto</h4>
-            <p style="font-size: 0.8rem; color: #666; margin: 0;">
-                Este aplicativo analisa o fluxo de formação de professores através do CEFOPE, 
-                fornecendo insights sobre a educação brasileira.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+        # # Informações adicionais
+        # st.markdown("""
+        # <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-top: 1rem;">
+        #     <h4 style="color: #1f77b4; margin: 0 0 0.5rem 0;">📊 Sobre o Projeto</h4>
+        #     <p style="font-size: 0.8rem; color: #666; margin: 0;">
+        #         Este aplicativo analisa o fluxo de formação de professores através do CEFOPE, 
+        #         fornecendo insights sobre a educação brasileira.
+        #     </p>
+        # </div>
+        # """, unsafe_allow_html=True)
         
-        # Status do projeto
-        st.markdown("""
-        <div style="padding: 1rem; background: #e8f5e8; border-radius: 8px; margin-top: 1rem;">
-            <h4 style="color: #28a745; margin: 0 0 0.5rem 0;">✅ Status</h4>
-            <p style="font-size: 0.8rem; color: #666; margin: 0;">
-                <strong>Versão:</strong> 1.0.0<br>
-                <strong>Última atualização:</strong> Agosto 2025<br>
-                <strong>Status:</strong> Em desenvolvimento
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+        # # Status do projeto
+        # st.markdown("""
+        # <div style="padding: 1rem; background: #e8f5e8; border-radius: 8px; margin-top: 1rem;">
+        #     <h4 style="color: #28a745; margin: 0 0 0.5rem 0;">✅ Status</h4>
+        #     <p style="font-size: 0.8rem; color: #666; margin: 0;">
+        #         <strong>Versão:</strong> 1.0.0<br>
+        #         <strong>Última atualização:</strong> Agosto 2025<br>
+        #         <strong>Status:</strong> Em desenvolvimento
+        #     </p>
+        # </div>
+        # """, unsafe_allow_html=True)
     
     return selected_page
