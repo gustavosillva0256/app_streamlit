@@ -38,16 +38,16 @@ def main():
     selected_page = render_sidebar()
     
     # Renderiza a página selecionada
-    if selected_page == "Dashboard":
-        render_dashboard()
-    elif selected_page == "Formação de Professores":
-        render_formacao()
-    elif selected_page == "Estatísticas por Região":
-        render_estatisticas()
-    elif selected_page == "Evolução Temporal":
-        render_evolucao()
-    elif selected_page == "Comparativos":
-        render_comparativos()
+    # if selected_page == "Dashboard":
+    #     render_dashboard()
+    # elif selected_page == "Formação de Professores":
+    #     render_formacao()
+    # elif selected_page == "Estatísticas por Região":
+    #     render_estatisticas()
+    # elif selected_page == "Evolução Temporal":
+    #     render_evolucao()
+    # elif selected_page == "Comparativos":
+    #     render_comparativos()
 
 if __name__ == "__main__":
     main()
