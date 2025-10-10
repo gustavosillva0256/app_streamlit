@@ -40,161 +40,183 @@ def render_dashboard():
     </div>
     """, unsafe_allow_html=True)
     
-    # # Métricas principais
-    # st.markdown("### 📊 Métricas Principais")
+    st.markdown("---")
     
-    # col1, col2, col3, col4 = st.columns(4)
+    # 📊 TABELA DESCRITIVA DA BASE DE DADOS (Requisito Etapa 3 - Item 1)
+    st.markdown("### 📊 Análise Descritiva da Base de Dados")
+    st.markdown("**Tabela gerada com `pandas.describe()` - Estatísticas descritivas dos dados educacionais (2015-2025)**")
     
-    # with col1:
-    #     st.metric(
-    #         label="Total de Professores (2024)",
-    #         value="53.200",
-    #         delta="+1.400",
-    #         delta_color="normal"
-    #     )
+    # Criar DataFrame com dados educacionais
+    df_analise = pd.DataFrame({
+        'Ano': list(range(2015, 2026)),
+        'Matriculas': [3200, 3500, 3800, 4200, 4600, 5100, 5700, 6300, 6900, 7500, 8200],
+        'Formacoes_Concluidas': [2800, 3100, 3400, 3800, 4200, 4700, 5200, 5800, 6400, 7000, 7600],
+        'Cursos_Ativos': [45, 52, 58, 65, 72, 79, 87, 95, 103, 112, 121],
+        'Taxa_Conclusao_Pct': [87.5, 88.6, 89.5, 90.5, 91.3, 92.2, 91.2, 92.1, 92.8, 93.3, 92.7],
+        'Satisfacao_Media': [4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.5, 4.6, 4.7, 4.7, 4.8]
+    })
     
-    # with col2:
-    #     st.metric(
-    #         label="Formações Realizadas",
-    #         value="2.120",
-    #         delta="+120",
-    #         delta_color="normal"
-    #     )
+    # Exibir tabela descritiva usando pandas describe()
+    st.dataframe(df_analise.describe().round(2), use_container_width=True)
     
-    # with col3:
-    #     st.metric(
-    #         label="Taxa de Crescimento",
-    #         value="2.7%",
-    #         delta="+0.3%",
-    #         delta_color="normal"
-    #     )
+    st.markdown("---")
     
-    # with col4:
-    #     st.metric(
-    #         label="Municípios Atendidos",
-    #         value="78",
-    #         delta="0",
-    #         delta_color="off"
-    #     )
+    # Métricas principais
+    st.markdown("### 📊 Métricas Principais")
     
-    # st.markdown("---")
+    col1, col2, col3, col4 = st.columns(4)
     
-    # # Gráficos principais
-    # col1, col2 = st.columns(2)
+    with col1:
+        st.metric(
+            label="Total de Professores (2025)",
+            value="53.200",
+            delta="+1.400",
+            delta_color="normal"
+        )
     
-    # with col1:
-    #     st.markdown("### 📈 Evolução Temporal")
+    with col2:
+        st.metric(
+            label="Formações Realizadas",
+            value="2.120",
+            delta="+120",
+            delta_color="normal"
+        )
+    
+    with col3:
+        st.metric(
+            label="Taxa de Crescimento",
+            value="2.7%",
+            delta="+0.3%",
+            delta_color="normal"
+        )
+    
+    with col4:
+        st.metric(
+            label="Municípios Atendidos",
+            value="78",
+            delta="0",
+            delta_color="off"
+        )
+    
+    st.markdown("---")
+    
+    # 📈 GRÁFICOS (Requisito Etapa 3 - Item 2: Gráficos à escolha)
+    st.markdown("### 📈 Visualizações de Dados")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📊 Evolução Temporal")
         
-    #     # Dados simulados para evolução
-    #     anos = list(range(2018, 2025))
-    #     professores = [45000, 46500, 47800, 49200, 50500, 51800, 53000, 54200]
-    #     formacoes = [1200, 1350, 1480, 1620, 1750, 1880, 2000, 2120]
+        # Dados simulados para evolução
+        anos = list(range(2018, 2026))
+        professores = [45000, 46500, 47800, 49200, 50500, 51800, 53000, 54200]
+        formacoes = [1200, 1350, 1480, 1620, 1750, 1880, 2000, 2120]
         
-    #     fig = go.Figure()
-    #     fig.add_trace(go.Scatter(
-    #         x=anos, y=professores,
-    #         mode='lines+markers',
-    #         name='Total de Professores',
-    #         line=dict(color='#1f77b4', width=3),
-    #         marker=dict(size=8)
-    #     ))
-    #     fig.add_trace(go.Scatter(
-    #         x=anos, y=formacoes,
-    #         mode='lines+markers',
-    #         name='Formações Realizadas',
-    #         line=dict(color='#ff7f0e', width=3),
-    #         marker=dict(size=8),
-    #         yaxis='y2'
-    #     ))
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=anos, y=professores,
+            mode='lines+markers',
+            name='Total de Professores',
+            line=dict(color='#1f77b4', width=3),
+            marker=dict(size=8)
+        ))
+        fig.add_trace(go.Scatter(
+            x=anos, y=formacoes,
+            mode='lines+markers',
+            name='Formações Realizadas',
+            line=dict(color='#ff7f0e', width=3),
+            marker=dict(size=8),
+            yaxis='y2'
+        ))
         
-    #     fig.update_layout(
-    #         title="Evolução de Professores e Formações no ES",
-    #         xaxis_title="Ano",
-    #         yaxis_title="Total de Professores",
-    #         yaxis2=dict(title="Formações Realizadas", overlaying='y', side='right'),
-    #         height=400,
-    #         showlegend=True
-    #     )
+        fig.update_layout(
+            title="Evolução de Professores e Formações no ES",
+            xaxis_title="Ano",
+            yaxis_title="Total de Professores",
+            yaxis2=dict(title="Formações Realizadas", overlaying='y', side='right'),
+            height=400,
+            showlegend=True
+        )
         
-    #     st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
     
-    # with col2:
-    #     st.markdown("### 🥧 Distribuição por Área")
+    with col2:
+        st.markdown("#### 🥧 Distribuição por Área")
         
-    #     # Dados simulados para distribuição
-    #     areas = ['Matemática', 'Português', 'História', 'Geografia', 'Ciências', 'Artes', 'Educação Física']
-    #     valores = [25, 22, 18, 15, 12, 5, 3]
+        # Dados simulados para distribuição
+        areas = ['Matemática', 'Português', 'História', 'Geografia', 'Ciências', 'Artes', 'Educação Física']
+        valores = [25, 22, 18, 15, 12, 5, 3]
         
-    #     fig = px.pie(
-    #         values=valores,
-    #         names=areas,
-    #         title="Distribuição de Formações por Área do Conhecimento",
-    #         color_discrete_sequence=px.colors.qualitative.Set3
-    #     )
-    #     fig.update_layout(height=400)
-    #     st.plotly_chart(fig, use_container_width=True)
+        fig = px.pie(
+            values=valores,
+            names=areas,
+            title="Distribuição de Formações por Área do Conhecimento",
+            color_discrete_sequence=px.colors.qualitative.Set3
+        )
+        fig.update_layout(height=400)
+        st.plotly_chart(fig, use_container_width=True)
     
-    # st.markdown("---")
+    #     st.markdown("---")
     
-    # # Gráfico de barras para dados regionais
-    # st.markdown("### 📍 Dados por Região")
+    # Gráfico de barras para dados regionais
+    st.markdown("### 📍 Dados por Região")
     
-    # regioes = ['Metropolitana', 'Norte', 'Sul', 'Caparaó', 'Central']
-    # professores_regiao = [18500, 12500, 9800, 6800, 5600]
-    # formacoes_regiao = [680, 420, 320, 240, 200]
+    regioes = ['Metropolitana', 'Norte', 'Sul', 'Caparaó', 'Central']
+    professores_regiao = [18500, 12500, 9800, 6800, 5600]
+    formacoes_regiao = [680, 420, 320, 240, 200]
     
-    # fig = make_subplots(
-    #     rows=1, cols=2,
-    #     subplot_titles=('Professores por Região', 'Formações por Região'),
-    #     specs=[[{"type": "bar"}, {"type": "bar"}]]
-    # )
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=('Professores por Região', 'Formações por Região'),
+        specs=[[{"type": "bar"}, {"type": "bar"}]]
+    )
     
-    # fig.add_trace(
-    #     go.Bar(x=regioes, y=professores_regiao, name='Professores', marker_color='#1f77b4'),
-    #     row=1, col=1
-    # )
+    fig.add_trace(
+        go.Bar(x=regioes, y=professores_regiao, name='Professores', marker_color='#1f77b4'),
+        row=1, col=1
+    )
     
-    # fig.add_trace(
-    #     go.Bar(x=regioes, y=formacoes_regiao, name='Formações', marker_color='#ff7f0e'),
-    #     row=1, col=2
-    # )
+    fig.add_trace(
+        go.Bar(x=regioes, y=formacoes_regiao, name='Formações', marker_color='#ff7f0e'),
+        row=1, col=2
+    )
     
-    # fig.update_layout(height=400, showlegend=False)
-    # st.plotly_chart(fig, use_container_width=True)
+    fig.update_layout(height=400, showlegend=False)
+    st.plotly_chart(fig, use_container_width=True)
     
-    # st.markdown("---")
+    #     st.markdown("---")
     
-    # # Indicadores de qualidade
-    # st.markdown("### 🎯 Indicadores de Qualidade")
+    # Indicadores de qualidade
+    st.markdown("### 🎯 Indicadores de Qualidade")
     
-    # col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
     
-    # with col1:
-    #     st.markdown("""
-    #     <div style="text-align: center; padding: 1rem; background: #e8f5e8; border-radius: 10px;">
-    #         <h4 style="color: #28a745; margin: 0;">📚 Taxa de Conclusão</h4>
-    #         <h2 style="color: #28a745; margin: 0.5rem 0;">89.5%</h2>
-    #         <p style="margin: 0; color: #666;">Meta: 90%</p>
-    #     </div>
-    #     """, unsafe_allow_html=True)
+    with col1:
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem; background: #e8f5e8; border-radius: 10px;">
+            <h4 style="color: #28a745; margin: 0;">📚 Taxa de Conclusão</h4>
+            <h2 style="color: #28a745; margin: 0.5rem 0;">89.5%</h2>
+            <p style="margin: 0; color: #666;">Meta: 90%</p>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # with col2:
-    #     st.markdown("""
-    #     <div style="text-align: center; padding: 1rem; background: #fff3cd; border-radius: 10px;">
-    #         <h4 style="color: #856404; margin: 0;">⭐ Satisfação</h4>
-    #         <h2 style="color: #856404; margin: 0.5rem 0;">4.2/5.0</h2>
-    #         <p style="margin: 0; color: #666;">Meta: 4.0/5.0</p>
-    #     </div>
-    #     """, unsafe_allow_html=True)
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem; background: #fff3cd; border-radius: 10px;">
+            <h4 style="color: #856404; margin: 0;">⭐ Satisfação</h4>
+            <h2 style="color: #856404; margin: 0.5rem 0;">4.2/5.0</h2>
+            <p style="margin: 0; color: #666;">Meta: 4.0/5.0</p>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # with col3:
-    #     st.markdown("""
-    #     <div style="text-align: center; padding: 1rem; background: #d1ecf1; border-radius: 10px;">
-    #         <h4 style="color: #0c5460; margin: 0;">🎯 Aplicabilidade</h4>
-    #         <h2 style="color: #0c5460; margin: 0.5rem 0;">87.3%</h2>
-    #         <p style="margin: 0; color: #666;">Meta: 85%</p>
-    #     </div>
-    #     """, unsafe_allow_html=True)
+    with col3:
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem; background: #d1ecf1; border-radius: 10px;">
+            <h4 style="color: #0c5460; margin: 0;">🎯 Aplicabilidade</h4>
+            <h2 style="color: #0c5460; margin: 0.5rem 0;">87.3%</h2>
+            <p style="margin: 0; color: #666;">Meta: 85%</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # st.markdown("---")
     
