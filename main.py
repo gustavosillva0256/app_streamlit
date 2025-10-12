@@ -34,19 +34,24 @@ def main():
     # CSS customizado para garantir tema claro com contraste
     st.markdown("""
     <style>
-    /* Tema claro com contraste adequado */
+    /* Forçar tema claro - CSS mais agressivo para Streamlit Cloud */
     .stApp {
         background-color: #ffffff !important;
         color: #262730 !important;
     }
     
-    /* Sidebar clara */
-    .stSidebar {
+    /* Sidebar clara - seletores mais específicos */
+    .stSidebar,
+    .css-1d391kg,
+    .css-1d391kg .css-1v0mbdj,
+    .stSidebar .css-1d391kg,
+    .stSidebar .css-1d391kg .css-1v0mbdj {
         background-color: #f0f2f6 !important;
     }
     
     /* Texto principal com contraste */
-    .main .block-container {
+    .main .block-container,
+    .main .block-container > div {
         background-color: #ffffff !important;
         color: #262730 !important;
     }
@@ -57,12 +62,13 @@ def main():
     }
     
     /* Texto padrão */
-    p, div, span {
+    p, div, span, .stMarkdown {
         color: #262730 !important;
     }
     
     /* Cards com borda para visibilidade */
-    .stMetric {
+    .stMetric,
+    .stMetric > div {
         background-color: #ffffff !important;
         border: 1px solid #e0e0e0 !important;
         color: #262730 !important;
@@ -71,7 +77,8 @@ def main():
     }
     
     /* Tabelas com contraste */
-    .stDataFrame {
+    .stDataFrame,
+    .stDataFrame table {
         background-color: #ffffff !important;
         color: #262730 !important;
     }
@@ -80,11 +87,6 @@ def main():
     .stButton > button {
         background-color: #1f77b4 !important;
         color: white !important;
-    }
-    
-    /* Menu lateral */
-    .css-1d391kg {
-        background-color: #f0f2f6 !important;
     }
     
     /* Links do menu */
@@ -97,6 +99,25 @@ def main():
     .css-1d391kg .css-1v0mbdj[aria-selected="true"] {
         background-color: #1f77b4 !important;
         color: white !important;
+    }
+    
+    /* Forçar cor de fundo em todos os elementos */
+    * {
+        background-color: inherit !important;
+    }
+    
+    /* Específico para sidebar - mais agressivo */
+    .stSidebar * {
+        background-color: #f0f2f6 !important;
+    }
+    
+    /* Override para elementos específicos do Streamlit Cloud */
+    .stApp > div {
+        background-color: #ffffff !important;
+    }
+    
+    .stApp > div > div {
+        background-color: #ffffff !important;
     }
     </style>
     """, unsafe_allow_html=True)
