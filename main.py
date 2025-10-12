@@ -31,79 +31,47 @@ st.set_page_config(
 def main():
     """Função principal do aplicativo"""
     
-    # CSS customizado para garantir tema claro - v3.0 - Streamlit Cloud Fix
+    # CSS customizado - NOVO e LIMPO para tema claro
     st.markdown("""
     <style>
-    /* Tema claro - CSS ULTRA AGRESSIVO para Streamlit Cloud */
+    /* Reset e tema claro - CSS NOVO */
     .stApp {
-        background-color: #ffffff !important;
-        color: #262730 !important;
+        background-color: #ffffff;
+        color: #262730;
     }
     
-    /* Sidebar clara - seletores múltiplos */
-    .stSidebar,
-    .css-1d391kg,
-    .css-1d391kg .css-1v0mbdj,
-    .stSidebar .css-1d391kg,
-    .stSidebar .css-1d391kg .css-1v0mbdj,
-    .stSidebar .css-1d391kg .css-1v0mbdj .css-1v0mbdj {
-        background-color: #f0f2f6 !important;
+    /* Sidebar */
+    .stSidebar {
+        background-color: #f0f2f6;
     }
     
-    /* Texto principal - múltiplos seletores */
-    .main .block-container,
-    .main .block-container > div,
-    .main .block-container > div > div {
-        background-color: #ffffff !important;
-        color: #262730 !important;
+    /* Conteúdo principal */
+    .main .block-container {
+        background-color: #ffffff;
+        color: #262730;
     }
     
-    /* Headers - todos os níveis */
-    h1, h2, h3, h4, h5, h6,
-    .main .block-container h1,
-    .main .block-container h2,
-    .main .block-container h3 {
-        color: #262730 !important;
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #262730;
     }
     
-    /* Cards com borda sutil */
-    .stMetric,
-    .stMetric > div,
-    .stMetric > div > div {
-        background-color: #ffffff !important;
-        border: 1px solid #e0e0e0 !important;
-        border-radius: 8px !important;
+    /* Cards */
+    .stMetric {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
     }
     
-    /* Tabelas - múltiplos seletores */
-    .stDataFrame,
-    .stDataFrame table,
-    .stDataFrame table tr,
-    .stDataFrame table td {
-        background-color: #ffffff !important;
-        color: #262730 !important;
+    /* Tabelas */
+    .stDataFrame {
+        background-color: #ffffff;
     }
     
     /* Botões */
     .stButton > button {
-        background-color: #1f77b4 !important;
-        color: white !important;
-    }
-    
-    /* Forçar tema claro no Streamlit Cloud - ULTRA AGRESSIVO */
-    .stApp > div,
-    .stApp > div > div,
-    .stApp > div > div > div {
-        background-color: #ffffff !important;
-    }
-    
-    /* Override para elementos específicos do Streamlit Cloud */
-    .stApp [data-testid="stSidebar"] {
-        background-color: #f0f2f6 !important;
-    }
-    
-    .stApp [data-testid="stSidebar"] * {
-        background-color: #f0f2f6 !important;
+        background-color: #1f77b4;
+        color: white;
     }
     </style>
     """, unsafe_allow_html=True)
