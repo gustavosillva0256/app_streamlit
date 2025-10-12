@@ -86,7 +86,7 @@ def render_bases_dados():
                 showlegend=True
             )
             
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
     
     with tab2:
         st.markdown("### 🏢 Secretaria de Estado da Educação (SEDU)")
@@ -128,7 +128,7 @@ def render_bases_dados():
                 color_discrete_sequence=['#1f77b4', '#ff7f0e', '#2ca02c']
             )
             fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
     
     with tab3:
         st.markdown("### 🧪 Dados Simulados para Testes")
@@ -161,7 +161,7 @@ def render_bases_dados():
             'Taxa_Conclusao': [0.92, 0.89, 0.91, 0.87, 0.90]
         })
         
-        st.dataframe(dados_exemplo, use_container_width=True)
+        st.dataframe(dados_exemplo, width='stretch')
         
         # Gráfico de evolução por região
         regioes = ['Metropolitana', 'Norte', 'Sul', 'Caparaó', 'Central']
@@ -175,7 +175,7 @@ def render_bases_dados():
             color_continuous_scale='Blues'
         )
         fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with tab4:
         st.markdown("### 📊 Metadados e Documentação")
@@ -229,7 +229,7 @@ def render_bases_dados():
             'Fonte': ['INEP', 'INEP', 'INEP', 'SEDU', 'SEDU', 'SEDU', 'SEDU']
         })
         
-        st.dataframe(metadados, use_container_width=True)
+        st.dataframe(metadados, width='stretch')
     
     # Seção de próximos passos
     st.markdown("---")

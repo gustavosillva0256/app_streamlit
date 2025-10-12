@@ -8,6 +8,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime, timedelta
 import json
 import os
+import streamlit as st
 
 class DataService:
     """Serviço para gerenciamento e manipulação de dados"""
@@ -17,6 +18,46 @@ class DataService:
         self.data_cache = {}
         self.data_sources = {}
         self.last_update = None
+    
+    def load_real_data(self) -> Dict[str, pd.DataFrame]:
+        """
+        Carrega dados reais do INEP para o Espírito Santo
+        
+        Returns:
+            Dicionário com DataFrames dos dados reais
+        """
+        try:
+            # Carregar dados das escolas do ES
+            escolas_df = pd.read_csv('data/dados/escolas_es_2024.csv', encoding='utf-8')
+            
+            # Carregar dados dos cursos técnicos do ES
+            cursos_df = pd.read_csv('data/dados/cursos_tecnicos_es_2024.csv', encoding='utf-8')
+            
+            # Processar dados das escolas
+            escolas_processed = self._process_escolas_data(escolas_df)
+            
+            # Processar dados dos cursos
+            cursos_processed = self._process_cursos_data(cursos_df)
+            
+            # Criar dados agregados para visualizações
+            aggregated_data = self._create_aggregated_data(escolas_processed, cursos_processed)
+            
+            data = {
+                "escolas": escolas_processed,
+                "cursos_tecnicos": cursos_processed,
+                **aggregated_data
+            }
+            
+            # Armazenando no cache
+            self.data_cache = data
+            self.last_update = datetime.now()
+            
+            return data
+            
+        except Exception as e:
+            print(f"Erro ao carregar dados reais: {e}")
+            print("Carregando dados simulados como fallback...")
+            return self.load_sample_data()
     
     def load_sample_data(self) -> Dict[str, pd.DataFrame]:
         """
@@ -108,7 +149,7 @@ class DataService:
             DataFrame ou None se não encontrado
         """
         if not self.data_cache:
-            self.load_sample_data()
+            self.load_real_data()
         
         return self.data_cache.get(dataset_name)
     
@@ -330,3 +371,116 @@ class DataService:
             }
         
         return report
+    
+    def _process_escolas_data(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Processa dados das escolas do ES
+        
+        Args:
+            df: DataFrame com dados das escolas
+            
+        Returns:
+            DataFrame processado
+        """
+        # Criar colunas derivadas
+        df_processed = df.copy()
+        
+        # Mapear códigos de dependência
+        dep_mapping = {1: 'Federal', 2: 'Estadual', 3: 'Municipal', 4: 'Privada'}
+        df_processed['TP_DEPENDENCIA_NOME'] = df_processed['TP_DEPENDENCIA'].map(dep_mapping)
+        
+        # Mapear códigos de localização
+        loc_mapping = {1: 'Urbana', 2: 'Rural'}
+        df_processed['TP_LOCALIZACAO_NOME'] = df_processed['TP_LOCALIZACAO'].map(loc_mapping)
+        
+        # Calcular total de professores por escola
+        prof_cols = [col for col in df.columns if col.startswith('QT_DOC')]
+        df_processed['TOTAL_PROFESSORES'] = df_processed[prof_cols].sum(axis=1, skipna=True)
+        
+        # Calcular total de matrículas por escola
+        mat_cols = [col for col in df.columns if col.startswith('QT_MAT')]
+        df_processed['TOTAL_MATRICULAS'] = df_processed[mat_cols].sum(axis=1, skipna=True)
+        
+        # Calcular total de turmas por escola
+        tur_cols = [col for col in df.columns if col.startswith('QT_TUR')]
+        df_processed['TOTAL_TURMAS'] = df_processed[tur_cols].sum(axis=1, skipna=True)
+        
+        return df_processed
+    
+    def _process_cursos_data(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Processa dados dos cursos técnicos do ES
+        
+        Args:
+            df: DataFrame com dados dos cursos
+            
+        Returns:
+            DataFrame processado
+        """
+        df_processed = df.copy()
+        
+        # Calcular total de matrículas por curso
+        mat_cols = [col for col in df.columns if col.startswith('QT_MAT')]
+        df_processed['TOTAL_MATRICULAS'] = df_processed[mat_cols].sum(axis=1, skipna=True)
+        
+        # Calcular total de cursos
+        curso_cols = [col for col in df.columns if col.startswith('QT_CURSO')]
+        df_processed['TOTAL_CURSOS'] = df_processed[curso_cols].sum(axis=1, skipna=True)
+        
+        return df_processed
+    
+    def _create_aggregated_data(self, escolas_df: pd.DataFrame, cursos_df: pd.DataFrame) -> Dict[str, pd.DataFrame]:
+        """
+        Cria dados agregados para visualizações
+        
+        Args:
+            escolas_df: DataFrame das escolas
+            cursos_df: DataFrame dos cursos
+            
+        Returns:
+            Dicionário com dados agregados
+        """
+        # Dados por município
+        municipios_data = escolas_df.groupby('NO_MUNICIPIO').agg({
+            'TOTAL_PROFESSORES': 'sum',
+            'TOTAL_MATRICULAS': 'sum',
+            'TOTAL_TURMAS': 'sum',
+            'CO_ENTIDADE': 'count'
+        }).reset_index()
+        municipios_data.columns = ['Municipio', 'Total_Professores', 'Total_Matriculas', 'Total_Turmas', 'Total_Escolas']
+        
+        # Dados por dependência
+        dependencia_data = escolas_df.groupby('TP_DEPENDENCIA_NOME').agg({
+            'TOTAL_PROFESSORES': 'sum',
+            'TOTAL_MATRICULAS': 'sum',
+            'CO_ENTIDADE': 'count'
+        }).reset_index()
+        dependencia_data.columns = ['Dependencia', 'Total_Professores', 'Total_Matriculas', 'Total_Escolas']
+        
+        # Dados por localização
+        localizacao_data = escolas_df.groupby('TP_LOCALIZACAO_NOME').agg({
+            'TOTAL_PROFESSORES': 'sum',
+            'TOTAL_MATRICULAS': 'sum',
+            'CO_ENTIDADE': 'count'
+        }).reset_index()
+        localizacao_data.columns = ['Localizacao', 'Total_Professores', 'Total_Matriculas', 'Total_Escolas']
+        
+        # Dados dos cursos técnicos por município
+        cursos_municipio = cursos_df.groupby('NO_MUNICIPIO').agg({
+            'TOTAL_MATRICULAS': 'sum',
+            'TOTAL_CURSOS': 'sum',
+            'NO_CURSO_EDUC_PROFISSIONAL': 'count'
+        }).reset_index()
+        cursos_municipio.columns = ['Municipio', 'Total_Matriculas', 'Total_Cursos', 'Ofertas_Cursos']
+        
+        # Top cursos técnicos
+        top_cursos = cursos_df['NO_CURSO_EDUC_PROFISSIONAL'].value_counts().head(20).reset_index()
+        top_cursos.columns = ['Curso', 'Ofertas']
+        
+        return {
+            "municipios": municipios_data,
+            "dependencia": dependencia_data,
+            "localizacao": localizacao_data,
+            "cursos_municipio": cursos_municipio,
+            "top_cursos": top_cursos
+        }

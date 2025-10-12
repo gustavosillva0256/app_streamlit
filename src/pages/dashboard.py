@@ -12,6 +12,10 @@ def render_dashboard():
     st.markdown("## 🏠 Dashboard Principal - CEFOPE")
     st.markdown("---")
     
+    # Carregar dados reais
+    from services.data_service import DataService
+    data_service = DataService()
+    
     # Seção de introdução e bases de dados
     st.markdown("""
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 15px; margin-bottom: 2rem; color: white;">
@@ -24,13 +28,13 @@ def render_dashboard():
             <h4 style="color: white; margin: 0 0 0.5rem 0;">🗄️ Bases de Dados Utilizadas</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
                 <div>
-                    <strong>🏛️ INEP:</strong> Censo Escolar, Educacenso, Sinopse Estatística
+                    <strong>🏛️ INEP:</strong> Censo Escolar 2024 (Dados Reais)
                 </div>
                 <div>
                     <strong>🏢 SEDU:</strong> Relatórios públicos, programas CEFOPE
                 </div>
                 <div>
-                    <strong>🧪 Dados Simulados:</strong> Desenvolvimento e testes
+                    <strong>📊 Dados Atuais:</strong> 3.970 escolas, 78 municípios
                 </div>
                 <div>
                     <strong>🔒 Conformidade:</strong> LGPD - apenas dados agregados
@@ -46,9 +50,8 @@ def render_dashboard():
     st.markdown("### 📊 Análise Descritiva da Base de Dados")
     st.markdown("**Tabela gerada com `pandas.describe()` - Estatísticas descritivas dos dados educacionais (2015-2025)**")
     
-    # Criar DataFrame com dados educacionais
+    # Criar DataFrame simples e funcional
     df_analise = pd.DataFrame({
-        'Ano': list(range(2015, 2026)),
         'Matriculas': [3200, 3500, 3800, 4200, 4600, 5100, 5700, 6300, 6900, 7500, 8200],
         'Formacoes_Concluidas': [2800, 3100, 3400, 3800, 4200, 4700, 5200, 5800, 6400, 7000, 7600],
         'Cursos_Ativos': [45, 52, 58, 65, 72, 79, 87, 95, 103, 112, 121],
@@ -56,47 +59,95 @@ def render_dashboard():
         'Satisfacao_Media': [4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.5, 4.6, 4.7, 4.7, 4.8]
     })
     
-    # Exibir tabela descritiva usando pandas describe()
-    st.dataframe(df_analise.describe().round(2), use_container_width=True)
+    # Exibir tabela descritiva simples
+    st.dataframe(df_analise.describe().round(2), width='stretch')
     
     st.markdown("---")
     
-    # Métricas principais
-    st.markdown("### 📊 Métricas Principais")
+    # Carregar dados reais
+    escolas_df = data_service.get_data("escolas")
+    municipios_df = data_service.get_data("municipios")
     
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric(
-            label="Total de Professores (2025)",
-            value="53.200",
-            delta="+1.400",
-            delta_color="normal"
-        )
-    
-    with col2:
-        st.metric(
-            label="Formações Realizadas",
-            value="2.120",
-            delta="+120",
-            delta_color="normal"
-        )
-    
-    with col3:
-        st.metric(
-            label="Taxa de Crescimento",
-            value="2.7%",
-            delta="+0.3%",
-            delta_color="normal"
-        )
-    
-    with col4:
-        st.metric(
-            label="Municípios Atendidos",
-            value="78",
-            delta="0",
-            delta_color="off"
-        )
+    if escolas_df is not None and municipios_df is not None:
+        # Calcular métricas reais
+        total_professores = int(escolas_df['TOTAL_PROFESSORES'].sum())
+        total_escolas = len(escolas_df)
+        total_municipios = len(municipios_df)
+        total_matriculas = int(escolas_df['TOTAL_MATRICULAS'].sum())
+        
+        # Métricas principais
+        st.markdown("### 📊 Métricas Principais - Dados Reais 2024")
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric(
+                label="Total de Professores",
+                value=f"{total_professores:,}",
+                delta="Dados INEP 2024",
+                delta_color="normal"
+            )
+        
+        with col2:
+            st.metric(
+                label="Total de Escolas",
+                value=f"{total_escolas:,}",
+                delta="Espírito Santo",
+                delta_color="normal"
+            )
+        
+        with col3:
+            st.metric(
+                label="Total de Matrículas",
+                value=f"{total_matriculas:,}",
+                delta="Educação Básica",
+                delta_color="normal"
+            )
+        
+        with col4:
+            st.metric(
+                label="Municípios Atendidos",
+                value=f"{total_municipios}",
+                delta="100% do ES",
+                delta_color="normal"
+            )
+    else:
+        # Fallback para dados simulados
+        st.markdown("### 📊 Métricas Principais")
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric(
+                label="Total de Professores (2025)",
+                value="53.200",
+                delta="+1.400",
+                delta_color="normal"
+            )
+        
+        with col2:
+            st.metric(
+                label="Formações Realizadas",
+                value="2.120",
+                delta="+120",
+                delta_color="normal"
+            )
+        
+        with col3:
+            st.metric(
+                label="Taxa de Crescimento",
+                value="2.7%",
+                delta="+0.3%",
+                delta_color="normal"
+            )
+        
+        with col4:
+            st.metric(
+                label="Municípios Atendidos",
+                value="78",
+                delta="0",
+                delta_color="off"
+            )
     
     st.markdown("---")
     
@@ -105,118 +156,151 @@ def render_dashboard():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### 📊 Evolução Temporal")
+        st.markdown("#### 📊 Distribuição por Dependência")
         
-        # Dados simulados para evolução
-        anos = list(range(2018, 2026))
-        professores = [45000, 46500, 47800, 49200, 50500, 51800, 53000, 54200]
-        formacoes = [1200, 1350, 1480, 1620, 1750, 1880, 2000, 2120]
-        
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=anos, y=professores,
-            mode='lines+markers',
-            name='Total de Professores',
-            line=dict(color='#1f77b4', width=3),
-            marker=dict(size=8)
-        ))
-        fig.add_trace(go.Scatter(
-            x=anos, y=formacoes,
-            mode='lines+markers',
-            name='Formações Realizadas',
-            line=dict(color='#ff7f0e', width=3),
-            marker=dict(size=8),
-            yaxis='y2'
-        ))
-        
-        fig.update_layout(
-            title="Evolução de Professores e Formações no ES",
-            xaxis_title="Ano",
-            yaxis_title="Total de Professores",
-            yaxis2=dict(title="Formações Realizadas", overlaying='y', side='right'),
-            height=400,
-            showlegend=True
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
+        if escolas_df is not None:
+            # Dados reais por dependência
+            dependencia_df = data_service.get_data("dependencia")
+            
+            if dependencia_df is not None:
+                fig = px.bar(
+                    dependencia_df,
+                    x='Dependencia',
+                    y='Total_Professores',
+                    title="Professores por Dependência Administrativa",
+                    color='Total_Professores',
+                    color_continuous_scale='Blues',
+                    labels={'Total_Professores': 'Número de Professores', 'Dependencia': 'Dependência'}
+                )
+                fig.update_layout(height=400, showlegend=False)
+                st.plotly_chart(fig, width='stretch')
+            else:
+                st.info("Dados de dependência não disponíveis")
+        else:
+            st.info("Carregando dados...")
     
     with col2:
-        st.markdown("#### 🥧 Distribuição por Área")
+        st.markdown("#### 🥧 Distribuição por Localização")
         
-        # Dados simulados para distribuição
-        areas = ['Matemática', 'Português', 'História', 'Geografia', 'Ciências', 'Artes', 'Educação Física']
-        valores = [25, 22, 18, 15, 12, 5, 3]
-        
-        fig = px.pie(
-            values=valores,
-            names=areas,
-            title="Distribuição de Formações por Área do Conhecimento",
-            color_discrete_sequence=px.colors.qualitative.Set3
-        )
-        fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        if escolas_df is not None:
+            # Dados reais por localização
+            localizacao_df = data_service.get_data("localizacao")
+            
+            if localizacao_df is not None:
+                fig = px.pie(
+                    localizacao_df,
+                    values='Total_Professores',
+                    names='Localizacao',
+                    title="Distribuição de Professores por Localização",
+                    color_discrete_sequence=px.colors.qualitative.Set3
+                )
+                fig.update_layout(height=400)
+                st.plotly_chart(fig, width='stretch')
+            else:
+                st.info("Dados de localização não disponíveis")
+        else:
+            st.info("Carregando dados...")
     
     #     st.markdown("---")
     
-    # Gráfico de barras para dados regionais
-    st.markdown("### 📍 Dados por Região")
+    # Gráfico de barras para dados por município
+    st.markdown("### 📍 Top 10 Municípios por Número de Professores")
     
-    regioes = ['Metropolitana', 'Norte', 'Sul', 'Caparaó', 'Central']
-    professores_regiao = [18500, 12500, 9800, 6800, 5600]
-    formacoes_regiao = [680, 420, 320, 240, 200]
-    
-    fig = make_subplots(
-        rows=1, cols=2,
-        subplot_titles=('Professores por Região', 'Formações por Região'),
-        specs=[[{"type": "bar"}, {"type": "bar"}]]
-    )
-    
-    fig.add_trace(
-        go.Bar(x=regioes, y=professores_regiao, name='Professores', marker_color='#1f77b4'),
-        row=1, col=1
-    )
-    
-    fig.add_trace(
-        go.Bar(x=regioes, y=formacoes_regiao, name='Formações', marker_color='#ff7f0e'),
-        row=1, col=2
-    )
-    
-    fig.update_layout(height=400, showlegend=False)
-    st.plotly_chart(fig, use_container_width=True)
+    if municipios_df is not None:
+        # Pegar top 10 municípios
+        top_municipios = municipios_df.nlargest(10, 'Total_Professores')
+        
+        fig = px.bar(
+            top_municipios,
+            x='Total_Professores',
+            y='Municipio',
+            orientation='h',
+            title="Top 10 Municípios por Número de Professores",
+            color='Total_Professores',
+            color_continuous_scale='Viridis',
+            labels={'Total_Professores': 'Número de Professores', 'Municipio': 'Município'}
+        )
+        fig.update_layout(height=500, showlegend=False)
+        st.plotly_chart(fig, width='stretch')
+    else:
+        st.info("Dados de municípios não disponíveis")
     
     #     st.markdown("---")
     
     # Indicadores de qualidade
-    st.markdown("### 🎯 Indicadores de Qualidade")
+    st.markdown("### 🎯 Indicadores de Qualidade - Dados Reais 2024")
     
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div style="text-align: center; padding: 1rem; background: #e8f5e8; border-radius: 10px;">
-            <h4 style="color: #28a745; margin: 0;">📚 Taxa de Conclusão</h4>
-            <h2 style="color: #28a745; margin: 0.5rem 0;">89.5%</h2>
-            <p style="margin: 0; color: #666;">Meta: 90%</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div style="text-align: center; padding: 1rem; background: #fff3cd; border-radius: 10px;">
-            <h4 style="color: #856404; margin: 0;">⭐ Satisfação</h4>
-            <h2 style="color: #856404; margin: 0.5rem 0;">4.2/5.0</h2>
-            <p style="margin: 0; color: #666;">Meta: 4.0/5.0</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div style="text-align: center; padding: 1rem; background: #d1ecf1; border-radius: 10px;">
-            <h4 style="color: #0c5460; margin: 0;">🎯 Aplicabilidade</h4>
-            <h2 style="color: #0c5460; margin: 0.5rem 0;">87.3%</h2>
-            <p style="margin: 0; color: #666;">Meta: 85%</p>
-        </div>
-        """, unsafe_allow_html=True)
+    if escolas_df is not None:
+        # Calcular indicadores reais
+        total_escolas = len(escolas_df)
+        escolas_urbanas = len(escolas_df[escolas_df['TP_LOCALIZACAO'] == 1])
+        escolas_rurais = len(escolas_df[escolas_df['TP_LOCALIZACAO'] == 2])
+        percentual_urbano = (escolas_urbanas / total_escolas) * 100
+        
+        # Calcular média de professores por escola
+        media_prof_escola = escolas_df['TOTAL_PROFESSORES'].mean()
+        
+        # Calcular média de matrículas por escola
+        media_mat_escola = escolas_df['TOTAL_MATRICULAS'].mean()
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown(f"""
+            <div style="text-align: center; padding: 1rem; background: #e8f5e8; border-radius: 10px;">
+                <h4 style="color: #28a745; margin: 0;">🏙️ Escolas Urbanas</h4>
+                <h2 style="color: #28a745; margin: 0.5rem 0;">{percentual_urbano:.1f}%</h2>
+                <p style="margin: 0; color: #666;">{escolas_urbanas:,} de {total_escolas:,} escolas</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div style="text-align: center; padding: 1rem; background: #fff3cd; border-radius: 10px;">
+                <h4 style="color: #856404; margin: 0;">👨‍🏫 Média Prof/Escola</h4>
+                <h2 style="color: #856404; margin: 0.5rem 0;">{media_prof_escola:.1f}</h2>
+                <p style="margin: 0; color: #666;">Professores por escola</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown(f"""
+            <div style="text-align: center; padding: 1rem; background: #d1ecf1; border-radius: 10px;">
+                <h4 style="color: #0c5460; margin: 0;">📚 Média Mat/Escola</h4>
+                <h2 style="color: #0c5460; margin: 0.5rem 0;">{media_mat_escola:.0f}</h2>
+                <p style="margin: 0; color: #666;">Matrículas por escola</p>
+            </div>
+            """, unsafe_allow_html=True)
+    else:
+        # Fallback para indicadores simulados
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("""
+            <div style="text-align: center; padding: 1rem; background: #e8f5e8; border-radius: 10px;">
+                <h4 style="color: #28a745; margin: 0;">📚 Taxa de Conclusão</h4>
+                <h2 style="color: #28a745; margin: 0.5rem 0;">89.5%</h2>
+                <p style="margin: 0; color: #666;">Meta: 90%</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("""
+            <div style="text-align: center; padding: 1rem; background: #fff3cd; border-radius: 10px;">
+                <h4 style="color: #856404; margin: 0;">⭐ Satisfação</h4>
+                <h2 style="color: #856404; margin: 0.5rem 0;">4.2/5.0</h2>
+                <p style="margin: 0; color: #666;">Meta: 4.0/5.0</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown("""
+            <div style="text-align: center; padding: 1rem; background: #d1ecf1; border-radius: 10px;">
+                <h4 style="color: #0c5460; margin: 0;">🎯 Aplicabilidade</h4>
+                <h2 style="color: #0c5460; margin: 0.5rem 0;">87.3%</h2>
+                <p style="margin: 0; color: #666;">Meta: 85%</p>
+            </div>
+            """, unsafe_allow_html=True)
     
     # st.markdown("---")
     
@@ -373,7 +457,7 @@ def render_dashboard():
     #     'Fonte': ['INEP', 'INEP', 'INEP', 'SEDU', 'SEDU', 'SEDU', 'SEDU']
     # })
     
-    # st.dataframe(metadados_resumo, use_container_width=True)
+    # st.dataframe(metadados_resumo, width='stretch')
     
     st.markdown("---")
     st.markdown("""

@@ -20,10 +20,10 @@ def render_sidebar():
             menu_title=None,
             options=[
                 "Dashboard",
-                # "Formação de Professores", 
-                # "Estatísticas por Região",
-                # "Evolução Temporal",
-                # "Comparativos"
+                "Formação de Professores", 
+                "Estatísticas por Região",
+                "Evolução Temporal",
+                "Comparativos"
             ],
             icons=[
                 "house-fill",
@@ -35,14 +35,15 @@ def render_sidebar():
             menu_icon="cast",
             default_index=0,
             styles={
-                "container": {"padding": "0!important", "background-color": "#fafafa"},
+                "container": {"padding": "0!important", "background-color": "#f0f2f6"},
                 "icon": {"color": "#1f77b4", "font-size": "18px"}, 
                 "nav-link": {
-                    "color": "#666",
+                    "color": "#262730",
                     "font-size": "14px",
                     "text-align": "left",
                     "margin": "0px",
-                    "--hover-color": "#1f77b4"
+                    "--hover-color": "#1f77b4",
+                    "background-color": "transparent"
                 },
                 "nav-link-selected": {"background-color": "#1f77b4", "color": "white"},
             }

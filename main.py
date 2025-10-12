@@ -31,6 +31,60 @@ st.set_page_config(
 def main():
     """Função principal do aplicativo"""
     
+    # CSS customizado para garantir tema claro
+    st.markdown("""
+    <style>
+    /* Força tema claro */
+    .stApp {
+        background-color: #ffffff !important;
+        color: #262730 !important;
+    }
+    
+    /* Sidebar clara */
+    .css-1d391kg {
+        background-color: #f0f2f6 !important;
+    }
+    
+    /* Texto principal */
+    .main .block-container {
+        background-color: #ffffff !important;
+        color: #262730 !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #262730 !important;
+    }
+    
+    /* Texto padrão */
+    p, div, span {
+        color: #262730 !important;
+    }
+    
+    /* Cards e containers */
+    .stMetric {
+        background-color: #ffffff !important;
+        border: 1px solid #e0e0e0 !important;
+    }
+    
+    /* Tabelas */
+    .stDataFrame {
+        background-color: #ffffff !important;
+    }
+    
+    /* Botões e controles */
+    .stButton > button {
+        background-color: #1f77b4 !important;
+        color: white !important;
+    }
+    
+    /* Menu lateral */
+    .css-1d391kg .css-1v0mbdj {
+        background-color: #f0f2f6 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Renderiza o cabeçalho
     render_header()
     

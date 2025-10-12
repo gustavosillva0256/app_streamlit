@@ -12,28 +12,39 @@ def render_comparativos():
     """Renderiza a página de análises comparativas"""
     
     st.title("📊 Análises Comparativas - CEFOPE")
-    st.markdown("Comparações entre diferentes períodos, regiões e indicadores educacionais")
+    st.markdown("Comparações entre diferentes períodos, regiões e indicadores educacionais - Dados Reais 2024")
+    
+    # Carregar dados reais
+    from services.data_service import DataService
+    data_service = DataService()
+    
+    # Carregar dados
+    escolas_df = data_service.get_data("escolas")
+    municipios_df = data_service.get_data("municipios")
+    dependencia_df = data_service.get_data("dependencia")
+    localizacao_df = data_service.get_data("localizacao")
+    cursos_df = data_service.get_data("cursos_tecnicos")
     
     # Seleção de tipo de comparação
     st.subheader("🔍 Tipo de Comparação")
     
     tipo_comparacao = st.selectbox(
         "Selecione o tipo de comparação",
-        ["Períodos", "Regiões", "Programas", "Indicadores", "Benchmark"]
+        ["Municípios", "Dependências", "Localização", "Cursos Técnicos", "Indicadores"]
     )
     
     st.markdown("---")
     
-    if tipo_comparacao == "Períodos":
-        render_comparacao_periodos()
-    elif tipo_comparacao == "Regiões":
-        render_comparacao_regioes()
-    elif tipo_comparacao == "Programas":
-        render_comparacao_programas()
+    if tipo_comparacao == "Municípios":
+        render_comparacao_municipios(municipios_df)
+    elif tipo_comparacao == "Dependências":
+        render_comparacao_dependencias(dependencia_df)
+    elif tipo_comparacao == "Localização":
+        render_comparacao_localizacao(localizacao_df)
+    elif tipo_comparacao == "Cursos Técnicos":
+        render_comparacao_cursos(cursos_df)
     elif tipo_comparacao == "Indicadores":
-        render_comparacao_indicadores()
-    elif tipo_comparacao == "Benchmark":
-        render_comparacao_benchmark()
+        render_comparacao_indicadores(escolas_df)
 
 def render_comparacao_periodos():
     """Renderiza comparação entre períodos"""
@@ -134,7 +145,7 @@ def render_comparacao_periodos():
         paper_bgcolor='rgba(0,0,0,0)'
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Análise de tendências
     st.markdown("---")
@@ -169,7 +180,7 @@ def render_comparacao_periodos():
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Tabela de variações
     st.subheader("📋 Resumo das Variações")
@@ -177,7 +188,7 @@ def render_comparacao_periodos():
         df_variacoes.style.format({
             "Variação (%)": "{:+.1f}%"
         }),
-        use_container_width=True
+        width='stretch'
     )
 
 def render_comparacao_regioes():
@@ -288,7 +299,7 @@ def render_comparacao_regioes():
         title=f"Comparação de Indicadores: {regiao1} vs {regiao2}"
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Análise de competitividade
     st.markdown("---")
@@ -401,7 +412,7 @@ def render_comparacao_programas():
         paper_bgcolor='rgba(0,0,0,0)'
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 def render_comparacao_indicadores():
     """Renderiza comparação entre indicadores"""
@@ -457,7 +468,7 @@ def render_comparacao_indicadores():
         paper_bgcolor='rgba(0,0,0,0)'
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Coeficiente de correlação
     correlacao = df_corr[indicador1].corr(df_corr[indicador2])
@@ -536,7 +547,7 @@ def render_comparacao_benchmark():
         title=f"CEFOPE vs {benchmark}"
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Análise de gap
     st.markdown("---")
@@ -568,7 +579,7 @@ def render_comparacao_benchmark():
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Tabela de gaps
     st.subheader("📋 Resumo dos Gaps")
@@ -578,7 +589,7 @@ def render_comparacao_benchmark():
             benchmark: "{:.1f}",
             "Gap": "{:+.1f}"
         }),
-        use_container_width=True
+        width='stretch'
     )
     
     # Recomendações baseadas no gap
@@ -606,3 +617,219 @@ def render_comparacao_benchmark():
         st.markdown("- Manter o equilíbrio atual")
         st.markdown("- Identificar oportunidades de crescimento")
         st.markdown("- Estabelecer metas mais ambiciosas")
+
+def render_comparacao_municipios(municipios_df):
+    """Renderiza comparação entre municípios"""
+    
+    st.subheader("🏙️ Comparação entre Municípios")
+    
+    if municipios_df is not None:
+        # Top 10 municípios
+        top_municipios = municipios_df.nlargest(10, 'Total_Professores')
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Gráfico de barras
+            fig = px.bar(
+                top_municipios,
+                x='Total_Professores',
+                y='Municipio',
+                orientation='h',
+                title="Top 10 Municípios por Número de Professores",
+                color='Total_Professores',
+                color_continuous_scale='Blues',
+                labels={'Total_Professores': 'Número de Professores', 'Municipio': 'Município'}
+            )
+            fig.update_layout(height=500)
+            st.plotly_chart(fig, width='stretch')
+        
+        with col2:
+            # Gráfico de pizza
+            fig = px.pie(
+                top_municipios,
+                values='Total_Professores',
+                names='Municipio',
+                title="Distribuição de Professores - Top 10 Municípios"
+            )
+            fig.update_layout(height=500)
+            st.plotly_chart(fig, width='stretch')
+        
+        # Tabela comparativa
+        st.subheader("📋 Tabela Comparativa")
+        st.dataframe(top_municipios, width='stretch')
+    else:
+        st.info("Dados de municípios não disponíveis")
+
+def render_comparacao_dependencias(dependencia_df):
+    """Renderiza comparação entre dependências"""
+    
+    st.subheader("🏫 Comparação entre Dependências Administrativas")
+    
+    if dependencia_df is not None:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Gráfico de barras
+            fig = px.bar(
+                dependencia_df,
+                x='Dependencia',
+                y='Total_Professores',
+                title="Professores por Dependência",
+                color='Total_Professores',
+                color_continuous_scale='Greens',
+                labels={'Total_Professores': 'Número de Professores', 'Dependencia': 'Dependência'}
+            )
+            st.plotly_chart(fig, width='stretch')
+        
+        with col2:
+            # Gráfico de pizza
+            fig = px.pie(
+                dependencia_df,
+                values='Total_Professores',
+                names='Dependencia',
+                title="Distribuição de Professores por Dependência"
+            )
+            st.plotly_chart(fig, width='stretch')
+        
+        # Tabela comparativa
+        st.subheader("📋 Tabela Comparativa")
+        st.dataframe(dependencia_df, width='stretch')
+    else:
+        st.info("Dados de dependências não disponíveis")
+
+def render_comparacao_localizacao(localizacao_df):
+    """Renderiza comparação entre localizações"""
+    
+    st.subheader("🌍 Comparação entre Localizações")
+    
+    if localizacao_df is not None:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Gráfico de barras
+            fig = px.bar(
+                localizacao_df,
+                x='Localizacao',
+                y='Total_Professores',
+                title="Professores por Localização",
+                color='Total_Professores',
+                color_continuous_scale='Oranges',
+                labels={'Total_Professores': 'Número de Professores', 'Localizacao': 'Localização'}
+            )
+            st.plotly_chart(fig, width='stretch')
+        
+        with col2:
+            # Gráfico de pizza
+            fig = px.pie(
+                localizacao_df,
+                values='Total_Professores',
+                names='Localizacao',
+                title="Distribuição de Professores por Localização"
+            )
+            st.plotly_chart(fig, width='stretch')
+        
+        # Tabela comparativa
+        st.subheader("📋 Tabela Comparativa")
+        st.dataframe(localizacao_df, width='stretch')
+    else:
+        st.info("Dados de localização não disponíveis")
+
+def render_comparacao_cursos(cursos_df):
+    """Renderiza comparação entre cursos técnicos"""
+    
+    st.subheader("🔧 Comparação entre Cursos Técnicos")
+    
+    if cursos_df is not None:
+        # Top 15 cursos
+        top_cursos = cursos_df['NO_CURSO_EDUC_PROFISSIONAL'].value_counts().head(15).reset_index()
+        top_cursos.columns = ['Curso', 'Ofertas']
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Gráfico de barras
+            fig = px.bar(
+                top_cursos,
+                x='Ofertas',
+                y='Curso',
+                orientation='h',
+                title="Top 15 Cursos Técnicos por Ofertas",
+                color='Ofertas',
+                color_continuous_scale='Viridis',
+                labels={'Ofertas': 'Número de Ofertas', 'Curso': 'Curso Técnico'}
+            )
+            fig.update_layout(height=600)
+            st.plotly_chart(fig, width='stretch')
+        
+        with col2:
+            # Gráfico de pizza
+            fig = px.pie(
+                top_cursos.head(10),
+                values='Ofertas',
+                names='Curso',
+                title="Distribuição dos Top 10 Cursos Técnicos"
+            )
+            fig.update_layout(height=600)
+            st.plotly_chart(fig, width='stretch')
+        
+        # Tabela comparativa
+        st.subheader("📋 Tabela Comparativa")
+        st.dataframe(top_cursos, width='stretch')
+    else:
+        st.info("Dados de cursos técnicos não disponíveis")
+
+def render_comparacao_indicadores(escolas_df):
+    """Renderiza comparação entre indicadores"""
+    
+    st.subheader("📊 Comparação entre Indicadores")
+    
+    if escolas_df is not None:
+        # Calcular indicadores
+        indicadores = {
+            'Indicador': ['Total de Professores', 'Total de Matrículas', 'Total de Turmas', 'Média Prof/Escola', 'Média Mat/Escola'],
+            'Valor': [
+                int(escolas_df['TOTAL_PROFESSORES'].sum()),
+                int(escolas_df['TOTAL_MATRICULAS'].sum()),
+                int(escolas_df['TOTAL_TURMAS'].sum()),
+                round(escolas_df['TOTAL_PROFESSORES'].mean(), 1),
+                round(escolas_df['TOTAL_MATRICULAS'].mean(), 1)
+            ]
+        }
+        
+        df_indicadores = pd.DataFrame(indicadores)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Gráfico de barras
+            fig = px.bar(
+                df_indicadores,
+                x='Indicador',
+                y='Valor',
+                title="Comparação de Indicadores Educacionais",
+                color='Valor',
+                color_continuous_scale='Reds',
+                labels={'Valor': 'Valor', 'Indicador': 'Indicador'}
+            )
+            fig.update_layout(xaxis_tickangle=-45)
+            st.plotly_chart(fig, width='stretch')
+        
+        with col2:
+            # Gráfico de pizza (normalizado)
+            df_normalizado = df_indicadores.copy()
+            df_normalizado['Valor_Normalizado'] = df_normalizado['Valor'] / df_normalizado['Valor'].max() * 100
+            
+            fig = px.pie(
+                df_normalizado,
+                values='Valor_Normalizado',
+                names='Indicador',
+                title="Distribuição Relativa dos Indicadores (%)"
+            )
+            st.plotly_chart(fig, width='stretch')
+        
+        # Tabela comparativa
+        st.subheader("📋 Tabela Comparativa")
+        st.dataframe(df_indicadores, width='stretch')
+    else:
+        st.info("Dados de indicadores não disponíveis")

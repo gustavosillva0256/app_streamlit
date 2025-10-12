@@ -12,122 +12,159 @@ def render_estatisticas():
     """Renderiza a página de estatísticas por região"""
     
     st.title("🗺️ Estatísticas por Região - CEFOPE")
-    st.markdown("Análise geográfica da formação de professores em todo o Brasil")
+    st.markdown("Análise geográfica da educação no Espírito Santo - Dados Reais 2024")
+    
+    # Carregar dados reais
+    from services.data_service import DataService
+    data_service = DataService()
+    
+    # Carregar dados
+    municipios_df = data_service.get_data("municipios")
+    escolas_df = data_service.get_data("escolas")
+    cursos_df = data_service.get_data("cursos_tecnicos")
     
     # Seleção de região
-    st.subheader("🔍 Seleção de Região")
+    st.subheader("🔍 Filtros de Análise")
     
-    col1, col2 = st.columns([1, 2])
+    # Seletor de região
+    regioes = ["Todas", "Norte", "Sul", "Central", "Metropolitana"]
+    regiao_selecionada = st.selectbox(
+        "Região",
+        regioes,
+        key="regiao_estatisticas"
+    )
     
-    with col1:
-        regiao_selecionada = st.selectbox(
-            "Região",
-            ["Todas", "Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"]
-        )
+    # Seleção de município
+    st.subheader("🔍 Seleção de Município")
     
-    with col2:
-        estado_selecionado = st.selectbox(
-            "Estado (se aplicável)",
-            ["Todos os Estados"] + [
-                "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal",
-                "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul",
-                "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí",
-                "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia",
-                "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"
-            ]
-        )
+    if municipios_df is not None:
+        # Ordenar municípios por número de professores
+        municipios_ordenados = municipios_df.sort_values('Total_Professores', ascending=False)
+        municipios_lista = ["Todos os Municípios"] + municipios_ordenados['Municipio'].tolist()
+        
+        col1, col2 = st.columns([1, 2])
+        
+        with col1:
+            municipio_selecionado = st.selectbox(
+                "Município",
+                municipios_lista
+            )
+        
+        with col2:
+            # Filtro por dependência
+            dependencia_df = data_service.get_data("dependencia")
+            if dependencia_df is not None:
+                dependencias = ["Todas"] + dependencia_df['Dependencia'].tolist()
+                dependencia_selecionada = st.selectbox(
+                    "Dependência Administrativa",
+                    dependencias
+                )
+            else:
+                dependencia_selecionada = "Todas"
+    else:
+        st.info("Carregando dados dos municípios...")
+        municipio_selecionado = "Todos os Municípios"
+        dependencia_selecionada = "Todas"
     
     st.markdown("---")
     
-    # Visão geral das regiões
-    st.subheader("📊 Visão Geral das Regiões")
+    # Visão geral dos municípios
+    st.subheader("📊 Visão Geral dos Municípios do ES")
     
-    # Dados simulados por região
-    regioes_data = {
-        "Região": ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"],
-        "Professores_Formados": [850, 2100, 1200, 4500, 3200],
-        "Cursos_Ativos": [23, 45, 28, 89, 67],
-        "Instituicoes_Parceiras": [12, 28, 18, 45, 32],
-        "Taxa_Conclusao": [85.2, 88.7, 87.3, 89.1, 91.2],
-        "Satisfacao_Media": [4.3, 4.5, 4.4, 4.6, 4.7]
-    }
+    if municipios_df is not None:
+        # Calcular métricas gerais
+        total_professores = int(municipios_df['Total_Professores'].sum())
+        total_escolas = int(municipios_df['Total_Escolas'].sum())
+        total_matriculas = int(municipios_df['Total_Matriculas'].sum())
+        total_municipios = len(municipios_df)
+        
+        # Métricas gerais
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric(
+                label="Total de Professores",
+                value=f"{total_professores:,}",
+                delta="Dados INEP 2024",
+                delta_color="normal"
+            )
+        
+        with col2:
+            st.metric(
+                label="Total de Escolas",
+                value=f"{total_escolas:,}",
+                delta="Espírito Santo",
+                delta_color="normal"
+            )
+        
+        with col3:
+            st.metric(
+                label="Total de Matrículas",
+                value=f"{total_matriculas:,}",
+                delta="Educação Básica",
+                delta_color="normal"
+            )
+        
+        with col4:
+            st.metric(
+                label="Municípios Atendidos",
+                value=f"{total_municipios}",
+                delta="100% do ES",
+                delta_color="normal"
+            )
+    else:
+        st.info("Carregando dados dos municípios...")
     
-    df_regioes = pd.DataFrame(regioes_data)
-    
-    # Métricas por região
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric(
-            label="Total de Professores",
-            value=f"{df_regioes['Professores_Formados'].sum():,}",
-            delta="+8.5%",
-            delta_color="normal"
-        )
-    
-    with col2:
-        st.metric(
-            label="Cursos Ativos",
-            value=f"{df_regioes['Cursos_Ativos'].sum()}",
-            delta="+15",
-            delta_color="normal"
-        )
-    
-    with col3:
-        st.metric(
-            label="Instituições",
-            value=f"{df_regioes['Instituicoes_Parceiras'].sum()}",
-            delta="+8",
-            delta_color="normal"
-        )
-    
-    with col4:
-        st.metric(
-            label="Taxa Média de Conclusão",
-            value=f"{df_regioes['Taxa_Conclusao'].mean():.1f}%",
-            delta="+1.2%",
-            delta_color="normal"
-        )
-    
-    # Gráficos regionais
+    # Gráficos por município
     st.markdown("---")
-    st.subheader("📈 Análise Regional")
+    st.subheader("📈 Análise por Município")
     
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        # Professores formados por região
-        fig = px.bar(
-            df_regioes,
-            x="Região",
-            y="Professores_Formados",
-            title="Professores Formados por Região",
-            color="Professores_Formados",
-            color_continuous_scale="Blues",
-            labels={"Professores_Formados": "Quantidade"}
-        )
-        fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with col2:
-        # Taxa de conclusão por região
-        fig = px.bar(
-            df_regioes,
-            x="Região",
-            y="Taxa_Conclusao",
-            title="Taxa de Conclusão por Região (%)",
-            color="Taxa_Conclusao",
-            color_continuous_scale="RdYlGn",
-            labels={"Taxa_Conclusao": "Taxa (%)"}
-        )
-        fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
-        )
-        st.plotly_chart(fig, use_container_width=True)
+    if municipios_df is not None:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Top 15 municípios por número de professores
+            top_municipios = municipios_df.nlargest(15, 'Total_Professores')
+            
+            fig = px.bar(
+                top_municipios,
+                x="Total_Professores",
+                y="Municipio",
+                orientation='h',
+                title="Top 15 Municípios por Número de Professores",
+                color="Total_Professores",
+                color_continuous_scale="Blues",
+                labels={"Total_Professores": "Número de Professores", "Municipio": "Município"}
+            )
+            fig.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                height=500
+            )
+            st.plotly_chart(fig, width='stretch')
+        
+        with col2:
+            # Distribuição de escolas por município
+            top_escolas = municipios_df.nlargest(15, 'Total_Escolas')
+            
+            fig = px.bar(
+                top_escolas,
+                x="Total_Escolas",
+                y="Municipio",
+                orientation='h',
+                title="Top 15 Municípios por Número de Escolas",
+                color="Total_Escolas",
+                color_continuous_scale="Greens",
+                labels={"Total_Escolas": "Número de Escolas", "Municipio": "Município"}
+            )
+            fig.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                height=500
+            )
+            st.plotly_chart(fig, width='stretch')
+    else:
+        st.info("Carregando dados dos municípios...")
     
     # Mapa de calor de indicadores
     st.markdown("---")
@@ -158,7 +195,7 @@ def render_estatisticas():
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Análise detalhada por estado (simulada)
     st.markdown("---")
@@ -194,7 +231,7 @@ def render_estatisticas():
         paper_bgcolor='rgba(0,0,0,0)',
         xaxis_tickangle=-45
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Tabela de dados por estado
     st.subheader("📋 Dados Detalhados por Estado")
@@ -202,7 +239,7 @@ def render_estatisticas():
         df_estados.style.format({
             "Taxa_Conclusao": "{:.1f}%"
         }),
-        use_container_width=True
+        width='stretch'
     )
     
     # Indicadores de desenvolvimento educacional
@@ -233,7 +270,7 @@ def render_estatisticas():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Investimento em educação por região
@@ -257,7 +294,7 @@ def render_estatisticas():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Análise de tendências regionais
     st.markdown("---")

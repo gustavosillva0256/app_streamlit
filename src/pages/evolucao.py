@@ -13,7 +13,17 @@ def render_evolucao():
     """Renderiza a página de evolução temporal"""
     
     st.title("📈 Evolução Temporal - CEFOPE")
-    st.markdown("Análise de tendências e evolução dos indicadores ao longo do tempo")
+    st.markdown("Análise de tendências e evolução dos indicadores ao longo do tempo - Dados Reais 2024")
+    
+    # Carregar dados reais
+    from services.data_service import DataService
+    data_service = DataService()
+    
+    # Carregar dados
+    escolas_df = data_service.get_data("escolas")
+    municipios_df = data_service.get_data("municipios")
+    dependencia_df = data_service.get_data("dependencia")
+    localizacao_df = data_service.get_data("localizacao")
     
     # Filtros temporais
     st.subheader("🔍 Filtros Temporais")
@@ -115,7 +125,7 @@ def render_evolucao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Evolução da taxa de conclusão
@@ -131,7 +141,7 @@ def render_evolucao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Análise de sazonalidade
     st.markdown("---")
@@ -157,7 +167,7 @@ def render_evolucao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Comparação entre anos (últimos 3 anos)
@@ -183,7 +193,7 @@ def render_evolucao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Análise de correlação temporal
     st.markdown("---")
@@ -213,7 +223,7 @@ def render_evolucao():
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Projeções e tendências futuras
     st.markdown("---")
@@ -249,7 +259,7 @@ def render_evolucao():
         paper_bgcolor='rgba(0,0,0,0)'
     )
     fig.add_vline(x=2025, line_dash="dash", line_color="red", annotation_text="Início das Projeções")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Análise de fatores de crescimento
     st.markdown("---")
@@ -274,7 +284,7 @@ def render_evolucao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Fatores externos
@@ -293,7 +303,7 @@ def render_evolucao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Insights e recomendações
     st.markdown("---")

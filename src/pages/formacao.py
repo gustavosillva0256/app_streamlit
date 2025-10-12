@@ -12,159 +12,194 @@ def render_formacao():
     """Renderiza a página de formação de professores"""
     
     st.title("🎓 Formação de Professores - CEFOPE")
-    st.markdown("Análise detalhada do fluxo educacional e programas de formação")
+    st.markdown("Análise detalhada do fluxo educacional e programas de formação - Dados Reais 2024")
+    
+    # Carregar dados reais
+    from services.data_service import DataService
+    data_service = DataService()
+    
+    # Carregar dados
+    escolas_df = data_service.get_data("escolas")
+    cursos_df = data_service.get_data("cursos_tecnicos")
+    top_cursos_df = data_service.get_data("top_cursos")
     
     # Filtros
     st.subheader("🔍 Filtros de Análise")
     
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        tipo_formacao = st.selectbox(
-            "Tipo de Formação",
-            ["Todos", "Formação Inicial", "Formação Continuada", "Pós-Graduação"]
-        )
-    
-    with col2:
-        periodo = st.selectbox(
-            "Período",
-            ["Últimos 5 anos", "Últimos 3 anos", "Último ano", "Personalizado"]
-        )
-    
-    with col3:
-        area = st.selectbox(
-            "Área de Conhecimento",
-            ["Todas", "Matemática", "Português", "História", "Geografia", "Ciências", "Artes", "Educação Física"]
-        )
+    if escolas_df is not None:
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            # Filtro por dependência
+            dependencia_df = data_service.get_data("dependencia")
+            if dependencia_df is not None:
+                dependencias = ["Todas"] + dependencia_df['Dependencia'].tolist()
+                dependencia_selecionada = st.selectbox(
+                    "Dependência Administrativa",
+                    dependencias
+                )
+            else:
+                dependencia_selecionada = "Todas"
+        
+        with col2:
+            # Filtro por localização
+            localizacao_df = data_service.get_data("localizacao")
+            if localizacao_df is not None:
+                localizacoes = ["Todas"] + localizacao_df['Localizacao'].tolist()
+                localizacao_selecionada = st.selectbox(
+                    "Localização",
+                    localizacoes
+                )
+            else:
+                localizacao_selecionada = "Todas"
+        
+        with col3:
+            # Filtro por município
+            municipios_df = data_service.get_data("municipios")
+            if municipios_df is not None:
+                municipios = ["Todos"] + municipios_df['Municipio'].tolist()
+                municipio_selecionado = st.selectbox(
+                    "Município",
+                    municipios
+                )
+            else:
+                municipio_selecionado = "Todos"
+    else:
+        st.info("Carregando dados...")
+        dependencia_selecionada = "Todas"
+        localizacao_selecionada = "Todas"
+        municipio_selecionado = "Todos"
     
     st.markdown("---")
     
     # Estatísticas da formação
-    st.subheader("📊 Estatísticas da Formação")
+    st.subheader("📊 Estatísticas da Educação no ES - Dados Reais 2024")
     
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric(
-            label="Total de Matrículas",
-            value="15.234",
-            delta="+8.7%",
-            delta_color="normal"
-        )
-    
-    with col2:
-        st.metric(
-            label="Formações Concluídas",
-            value="12.847",
-            delta="+5.2%",
-            delta_color="normal"
-        )
-    
-    with col3:
-        st.metric(
-            label="Em Andamento",
-            value="2.387",
-            delta="+12.3%",
-            delta_color="normal"
-        )
-    
-    with col4:
-        st.metric(
-            label="Taxa de Evasão",
-            value="12.8%",
-            delta="-2.1%",
-            delta_color="inverse"
-        )
+    if escolas_df is not None:
+        # Calcular métricas reais
+        total_professores = int(escolas_df['TOTAL_PROFESSORES'].sum())
+        total_escolas = len(escolas_df)
+        total_matriculas = int(escolas_df['TOTAL_MATRICULAS'].sum())
+        total_turmas = int(escolas_df['TOTAL_TURMAS'].sum())
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric(
+                label="Total de Professores",
+                value=f"{total_professores:,}",
+                delta="Dados INEP 2024",
+                delta_color="normal"
+            )
+        
+        with col2:
+            st.metric(
+                label="Total de Escolas",
+                value=f"{total_escolas:,}",
+                delta="Espírito Santo",
+                delta_color="normal"
+            )
+        
+        with col3:
+            st.metric(
+                label="Total de Matrículas",
+                value=f"{total_matriculas:,}",
+                delta="Educação Básica",
+                delta_color="normal"
+            )
+        
+        with col4:
+            st.metric(
+                label="Total de Turmas",
+                value=f"{total_turmas:,}",
+                delta="Ativas",
+                delta_color="normal"
+            )
+    else:
+        st.info("Carregando dados...")
     
     # Gráficos de análise
     st.markdown("---")
-    st.subheader("📈 Análise Temporal da Formação")
+    st.subheader("📈 Análise da Educação no ES")
     
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        # Evolução mensal das matrículas
-        meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
-        matriculas = [1200, 1350, 1100, 980, 850, 720, 680, 750, 890, 1100, 1250, 1400]
+    if escolas_df is not None:
+        col1, col2 = st.columns(2)
         
-        fig = px.line(
-            x=meses,
-            y=matriculas,
-            title="Matrículas por Mês (2025)",
-            labels={"x": "Mês", "y": "Matrículas"},
-            markers=True
-        )
-        fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with col2:
-        # Distribuição por modalidade
-        modalidades = ["Presencial", "Híbrido", "EAD"]
-        quantidades = [45, 35, 20]
+        with col1:
+            # Distribuição por dependência
+            dependencia_df = data_service.get_data("dependencia")
+            
+            if dependencia_df is not None:
+                fig = px.pie(
+                    dependencia_df,
+                    values='Total_Professores',
+                    names='Dependencia',
+                    title="Distribuição de Professores por Dependência",
+                    color_discrete_sequence=px.colors.qualitative.Set3
+                )
+                fig.update_layout(
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)'
+                )
+                st.plotly_chart(fig, width='stretch')
+            else:
+                st.info("Dados de dependência não disponíveis")
         
-        fig = px.bar(
-            x=modalidades,
-            y=quantidades,
-            title="Distribuição por Modalidade (%)",
-            labels={"x": "Modalidade", "y": "Percentual"},
-            color=quantidades,
-            color_continuous_scale="Viridis"
-        )
-        fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
-        )
-        st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            # Distribuição por localização
+            localizacao_df = data_service.get_data("localizacao")
+            
+            if localizacao_df is not None:
+                fig = px.bar(
+                    localizacao_df,
+                    x='Localizacao',
+                    y='Total_Professores',
+                    title="Professores por Localização",
+                    color='Total_Professores',
+                    color_continuous_scale="Viridis",
+                    labels={'Total_Professores': 'Número de Professores', 'Localizacao': 'Localização'}
+                )
+                fig.update_layout(
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)'
+                )
+                st.plotly_chart(fig, width='stretch')
+            else:
+                st.info("Dados de localização não disponíveis")
+    else:
+        st.info("Carregando dados...")
     
     # Análise por programa
     st.markdown("---")
-    st.subheader("🎯 Programas de Formação")
+    st.subheader("🎯 Cursos Técnicos no ES")
     
-    # Dados simulados dos programas
-    programas_data = {
-        "Programa": [
-            "Licenciatura em Matemática",
-            "Licenciatura em Português",
-            "Pedagogia",
-            "Formação Continuada em História",
-            "Especialização em Educação Especial",
-            "Mestrado em Educação"
-        ],
-        "Matrículas": [450, 380, 520, 280, 320, 180],
-        "Concluídos": [420, 350, 480, 250, 290, 160],
-        "Taxa_Conclusao": [93.3, 92.1, 92.3, 89.3, 90.6, 88.9]
-    }
-    
-    df_programas = pd.DataFrame(programas_data)
-    
-    # Gráfico de barras para programas
-    fig = px.bar(
-        df_programas,
-        x="Programa",
-        y="Matrículas",
-        title="Matrículas por Programa",
-        color="Taxa_Conclusao",
-        color_continuous_scale="RdYlGn",
-        labels={"Taxa_Conclusao": "Taxa de Conclusão (%)"}
-    )
-    fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        xaxis_tickangle=-45
-    )
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Tabela detalhada
-    st.subheader("📋 Detalhamento dos Programas")
-    st.dataframe(
-        df_programas.style.format({
-            "Taxa_Conclusao": "{:.1f}%"
-        }),
-        use_container_width=True
-    )
+    if top_cursos_df is not None:
+        # Gráfico de barras para cursos técnicos
+        fig = px.bar(
+            top_cursos_df.head(15),
+            x="Ofertas",
+            y="Curso",
+            orientation='h',
+            title="Top 15 Cursos Técnicos por Número de Ofertas",
+            color="Ofertas",
+            color_continuous_scale="RdYlGn",
+            labels={"Ofertas": "Número de Ofertas", "Curso": "Curso Técnico"}
+        )
+        fig.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            height=600
+        )
+        st.plotly_chart(fig, width='stretch')
+        
+        # Tabela detalhada
+        st.subheader("📋 Detalhamento dos Cursos Técnicos")
+        st.dataframe(
+            top_cursos_df.head(20),
+            width='stretch'
+        )
+    else:
+        st.info("Dados de cursos técnicos não disponíveis")
     
     # Indicadores de qualidade
     st.markdown("---")
@@ -189,7 +224,7 @@ def render_formacao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Taxa de empregabilidade
@@ -207,7 +242,7 @@ def render_formacao():
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Informações sobre metodologia
     st.markdown("---")
