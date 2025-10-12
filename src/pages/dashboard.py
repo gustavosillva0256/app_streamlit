@@ -48,26 +48,161 @@ def render_dashboard():
     
     # 📊 TABELA DESCRITIVA DA BASE DE DADOS (Requisito Etapa 3 - Item 1)
     st.markdown("### 📊 Análise Descritiva da Base de Dados")
-    st.markdown("**Tabela gerada com `pandas.describe()` - Estatísticas descritivas dos dados educacionais (2015-2025)**")
+    st.markdown("**Estatísticas descritivas dos dados educacionais do Espírito Santo - INEP 2024**")
     
-    # Criar DataFrame simples e funcional
-    df_analise = pd.DataFrame({
-        'Matriculas': [3200, 3500, 3800, 4200, 4600, 5100, 5700, 6300, 6900, 7500, 8200],
-        'Formacoes_Concluidas': [2800, 3100, 3400, 3800, 4200, 4700, 5200, 5800, 6400, 7000, 7600],
-        'Cursos_Ativos': [45, 52, 58, 65, 72, 79, 87, 95, 103, 112, 121],
-        'Taxa_Conclusao_Pct': [87.5, 88.6, 89.5, 90.5, 91.3, 92.2, 91.2, 92.1, 92.8, 93.3, 92.7],
-        'Satisfacao_Media': [4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.5, 4.6, 4.7, 4.7, 4.8]
-    })
-    
-    # Exibir tabela descritiva simples
-    st.dataframe(df_analise.describe().round(2), width='stretch')
-    
-    st.markdown("---")
-    
-    # Carregar dados reais
+    # Carregar dados reais para análise
     escolas_df = data_service.get_data("escolas")
     municipios_df = data_service.get_data("municipios")
     
+    if escolas_df is not None and municipios_df is not None:
+        # Limpar dados - remover escolas com valores zero (provavelmente inativas)
+        escolas_ativas = escolas_df[
+            (escolas_df['TOTAL_PROFESSORES'] > 0) | 
+            (escolas_df['TOTAL_MATRICULAS'] > 0) | 
+            (escolas_df['TOTAL_TURMAS'] > 0)
+        ].copy()
+        
+        st.info(f"📊 **Dados Limpos:** {len(escolas_ativas)} escolas ativas de {len(escolas_df)} total (removidas {len(escolas_df) - len(escolas_ativas)} escolas inativas)")
+        
+        # Criar DataFrame com dados das escolas ativas
+        df_analise_escolas = pd.DataFrame({
+            'Total_Professores': escolas_ativas['TOTAL_PROFESSORES'].values,
+            'Total_Matriculas': escolas_ativas['TOTAL_MATRICULAS'].values,
+            'Total_Turmas': escolas_ativas['TOTAL_TURMAS'].values
+        })
+        
+        # Criar DataFrame separado com dados dos municípios
+        df_analise_municipios = pd.DataFrame({
+            'Escolas_por_Municipio': municipios_df['Total_Escolas'].values,
+            'Professores_por_Municipio': municipios_df['Total_Professores'].values,
+            'Matriculas_por_Municipio': municipios_df['Total_Matriculas'].values
+        })
+        
+        # Calcular estatísticas descritivas para escolas
+        df_stats_escolas = df_analise_escolas.describe().round(2)
+        
+        # Renomear colunas para nomes mais descritivos
+        df_stats_escolas.columns = [
+            '👨‍🏫 Professores por Escola',
+            '👥 Matrículas por Escola', 
+            '🏫 Turmas por Escola'
+        ]
+        
+        # Renomear índice para português
+        df_stats_escolas.index = [
+            'Contagem',
+            'Média',
+            'Desvio Padrão',
+            'Valor Mínimo',
+            'Primeiro Quartil (25%)',
+            'Mediana (50%)',
+            'Terceiro Quartil (75%)',
+            'Valor Máximo'
+        ]
+        
+        # Formatar valores para melhor apresentação
+        df_stats_escolas_formatted = df_stats_escolas.copy()
+        
+        # Aplicar formatação específica por coluna
+        for col in df_stats_escolas_formatted.columns:
+            # Formatar números inteiros
+            df_stats_escolas_formatted[col] = df_stats_escolas_formatted[col].apply(
+                lambda x: f"{int(x):,}" if pd.notna(x) and x != 0 else f"{x:.2f}"
+            )
+        
+        # Exibir tabela formatada das escolas
+        st.markdown(f"**📊 Estatísticas por Escola ({len(escolas_ativas):,} escolas ativas do ES)**")
+        st.dataframe(df_stats_escolas_formatted, width='stretch')
+        
+        # Calcular estatísticas descritivas para municípios
+        df_stats_municipios = df_analise_municipios.describe().round(2)
+        
+        # Renomear colunas para nomes mais descritivos
+        df_stats_municipios.columns = [
+            '🏢 Escolas por Município',
+            '👨‍🏫 Professores por Município',
+            '👥 Matrículas por Município'
+        ]
+        
+        # Renomear índice para português
+        df_stats_municipios.index = [
+            'Contagem',
+            'Média',
+            'Desvio Padrão',
+            'Valor Mínimo',
+            'Primeiro Quartil (25%)',
+            'Mediana (50%)',
+            'Terceiro Quartil (75%)',
+            'Valor Máximo'
+        ]
+        
+        # Formatar valores para melhor apresentação
+        df_stats_municipios_formatted = df_stats_municipios.copy()
+        
+        # Aplicar formatação específica por coluna
+        for col in df_stats_municipios_formatted.columns:
+            # Formatar números inteiros
+            df_stats_municipios_formatted[col] = df_stats_municipios_formatted[col].apply(
+                lambda x: f"{int(x):,}" if pd.notna(x) and x != 0 else f"{x:.2f}"
+            )
+        
+        # Exibir tabela formatada dos municípios
+        st.markdown("**🏢 Estatísticas por Município (78 municípios do ES)**")
+        st.dataframe(df_stats_municipios_formatted, width='stretch')
+        
+        # Adicionar interpretação dos dados
+        st.markdown("""
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            <h4 style="color: #1f77b4; margin: 0 0 0.5rem 0;">📋 Interpretação dos Dados</h4>
+            <ul style="margin: 0; padding-left: 1.5rem; color: #666;">
+                <li><strong>Contagem:</strong> Número total de observações (escolas ativas ou municípios)</li>
+                <li><strong>Média:</strong> Valor médio da variável analisada</li>
+                <li><strong>Desvio Padrão:</strong> Medida de dispersão dos dados</li>
+                <li><strong>Mediana:</strong> Valor que divide os dados ao meio (50%)</li>
+                <li><strong>Quartis:</strong> Valores que dividem os dados em quartos (25%, 75%)</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Adicionar seção sobre limpeza de dados
+        st.markdown("""
+        <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            <h4 style="color: #28a745; margin: 0 0 0.5rem 0;">🧹 Limpeza de Dados Aplicada</h4>
+            <ul style="margin: 0; padding-left: 1.5rem; color: #666;">
+                <li><strong>Escolas Inativas Removidas:</strong> Escolas com zero professores, matrículas e turmas</li>
+                <li><strong>Dados Válidos:</strong> Apenas escolas com pelo menos uma atividade educacional</li>
+                <li><strong>Qualidade:</strong> Estatísticas mais representativas da realidade educacional</li>
+                <li><strong>Fonte:</strong> Dados originais do INEP 2024 processados e validados</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Tabela adicional com dados anuais detalhados
+        st.markdown("### 📈 Dados Anuais Detalhados - Espírito Santo 2024")
+        
+        # Criar tabela com dados agregados por município (top 10)
+        top_municipios = municipios_df.nlargest(10, 'Total_Professores').copy()
+        
+        # Formatar dados para apresentação
+        df_detalhado = pd.DataFrame({
+            '🏢 Município': top_municipios['Municipio'],
+            '👨‍🏫 Total de Professores': top_municipios['Total_Professores'].apply(lambda x: f"{int(x):,}"),
+            '👥 Total de Matrículas': top_municipios['Total_Matriculas'].apply(lambda x: f"{int(x):,}"),
+            '🏫 Total de Turmas': top_municipios['Total_Turmas'].apply(lambda x: f"{int(x):,}"),
+            '🏢 Número de Escolas': top_municipios['Total_Escolas'].apply(lambda x: f"{int(x):,}"),
+            '📊 Professores/Escola': (top_municipios['Total_Professores'] / top_municipios['Total_Escolas']).round(1)
+        })
+        
+        st.dataframe(df_detalhado, width='stretch', hide_index=True)
+        
+        st.markdown("*Top 10 municípios do Espírito Santo por número de professores - Dados INEP 2024*")
+        
+    else:
+        st.info("Carregando dados para análise descritiva...")
+    
+    st.markdown("---")
+    
+    # Usar dados já carregados acima
     if escolas_df is not None and municipios_df is not None:
         # Calcular métricas reais
         total_professores = int(escolas_df['TOTAL_PROFESSORES'].sum())
