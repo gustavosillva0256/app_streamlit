@@ -25,19 +25,19 @@ def render_dashboard():
             Monitoramento, análise e previsão de indicadores da formação continuada através do CEFOPE.
         </p>
         <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
-            <h4 style="color: white; margin: 0 0 0.5rem 0;">🗄️ Bases de Dados Utilizadas</h4>
+            <h4 style="color: white; margin: 0 0 0.5rem 0;">🗄️ Fonte dos Dados</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
                 <div>
-                    <strong>🏛️ INEP:</strong> Censo Escolar 2024 (Dados Reais)
+                    <strong>🏛️ INEP:</strong> Censo Escolar 2024 (Dados Oficiais)
                 </div>
                 <div>
-                    <strong>🏢 SEDU:</strong> Relatórios públicos, programas CEFOPE
+                    <strong>📊 Microdados:</strong> Educação Básica + Cursos Técnicos
                 </div>
                 <div>
-                    <strong>📊 Dados Atuais:</strong> 3.970 escolas, 78 municípios
+                    <strong>📈 Cobertura:</strong> 3.970 escolas, 78 municípios do ES
                 </div>
                 <div>
-                    <strong>🔒 Conformidade:</strong> LGPD - apenas dados agregados
+                    <strong>🔒 Conformidade:</strong> LGPD - dados públicos agregados
                 </div>
             </div>
         </div>
@@ -312,152 +312,80 @@ def render_dashboard():
     with col1:
         st.markdown("""
         **🔄 Em Desenvolvimento:**
-        - Integração com APIs oficiais do INEP
-        - Pipeline de dados automatizado
-        - Validação de qualidade em tempo real
-        - Cache inteligente de dados
+        - Atualização automática com novos dados do INEP
+        - Pipeline de processamento otimizado
+        - Validação de qualidade dos microdados
+        - Análises comparativas históricas
         """)
     
     with col2:
         st.markdown("""
         **🚀 Futuras Expansões:**
-        - Dashboard preditivo com ML
-        - Indicadores de impacto educacional
-        - Mapas interativos por região
-        - Relatórios automatizados
+        - Análise preditiva com dados do INEP
+        - Indicadores de qualidade educacional
+        - Mapas interativos por município
+        - Relatórios personalizados por região
         """)
     
     # Informações técnicas sobre as bases de dados
     st.markdown("---")
-    st.markdown("### 📋 Informações Técnicas das Bases de Dados")
+    st.markdown("### 📋 Fonte dos Dados - INEP 2024")
     
-    # Criar tabs para organizar as informações
-    tab1, tab2, tab3 = st.tabs(["🏛️ INEP", "🏢 SEDU", "🧪 Dados Simulados"])
+    col1, col2 = st.columns([2, 1])
     
-    with tab1:
-        col1, col2 = st.columns([2, 1])
+    with col1:
+        st.markdown("""
+        **🏛️ Instituto Nacional de Estudos e Pesquisas Educacionais (INEP)**
+        
+        📊 **Censo Escolar 2024**
+        - Dados oficiais sobre escolas do Espírito Santo
+        - Informações sobre professores, matrículas e turmas
+        - Dados demográficos e geográficos por município
+        - Frequência: Anual (dados mais recentes)
+        
+        📈 **Microdados da Educação Básica**
+        - Dados detalhados de 3.970 escolas do ES
+        - Informações por dependência administrativa
+        - Classificação urbana/rural
+        - Dados de infraestrutura e recursos
+        
+        📋 **Suplemento de Cursos Técnicos**
+        - Dados de 584 cursos técnicos no ES
+        - Informações sobre matrículas e ofertas
+        - Dados por município e área de conhecimento
+        - Frequência: Anual
+        """)
+    
+    with col2:
+        st.markdown("""
+        **🔗 Acesso aos Dados:**
+        - Portal de dados abertos do INEP
+        - Microdados disponíveis publicamente
+        - APIs oficiais do governo
+        
+        **📁 Formatos:**
+        - CSV (separado por ponto e vírgula)
+        - Codificação: Latin-1
+        - Dados processados e filtrados
+        
+        **📅 Atualização:**
+        - Dados de 2024 (mais recentes)
+        - Processamento em tempo real
+        - Filtros aplicados para ES
+        """)
+    
+    # Estatísticas dos dados carregados
+    if 'municipios' in st.session_state.get('data_cache', {}):
+        municipios_df = st.session_state['data_cache']['municipios']
+        st.markdown("**📊 Estatísticas dos Dados Carregados:**")
+        col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.markdown("""
-            **Instituto Nacional de Estudos e Pesquisas Educacionais (INEP)**
-            
-            📊 **Censo Escolar**
-            - Dados sobre escolas, professores e infraestrutura
-            - Informações demográficas e geográficas
-            - Estatísticas por município e região
-            - Frequência: Anual
-            
-            📈 **Educacenso**
-            - Dados detalhados sobre matrículas
-            - Informações sobre docentes e gestores
-            - Indicadores de qualidade educacional
-            - Frequência: Anual
-            
-            📋 **Sinopse Estatística**
-            - Resumos estatísticos consolidados
-            - Séries históricas de indicadores
-            - Comparações regionais e temporais
-            - Frequência: Anual
-            """)
-        
+            st.metric("Municípios", len(municipios_df))
         with col2:
-            st.markdown("""
-            **🔗 Acesso:**
-            - Portal de dados abertos
-            - APIs oficiais
-            - Downloads diretos
-            
-            **📁 Formatos:**
-            - CSV, JSON, Excel
-            - Relatórios em PDF
-            """)
-    
-    with tab2:
-        col1, col2 = st.columns([2, 1])
-        
-        with col1:
-            st.markdown("""
-            **Secretaria de Estado da Educação (SEDU)**
-            
-            📋 **Relatórios Públicos**
-            - Relatórios de gestão e prestação de contas
-            - Dados sobre programas de formação continuada
-            - Estatísticas de cursos e capacitações
-            - Frequência: Trimestral/Anual
-            
-            🎯 **Programas CEFOPE**
-            - Dados sobre cursos oferecidos
-            - Informações sobre participantes
-            - Metas e resultados alcançados
-            - Frequência: Trimestral
-            
-            📊 **Indicadores de Desempenho**
-            - Taxa de conclusão dos cursos
-            - Satisfação dos participantes
-            - Impacto na prática pedagógica
-            - Frequência: Trimestral
-            """)
-        
-        with col2:
-            st.markdown("""
-            **🔗 Acesso:**
-            - Relatórios públicos
-            - Portal da transparência
-            - Solicitações via LAI
-            
-            **📁 Formatos:**
-            - PDF, Excel
-            - Dados estruturados
-            """)
-    
-    with tab3:
-        col1, col2 = st.columns([2, 1])
-        
-        with col1:
-            st.markdown("""
-            **Dados Simulados para Desenvolvimento**
-            
-            🔬 **Propósito:**
-            - Validação de funcionalidades
-            - Testes de performance
-            - Demonstração de capacidades
-            - Desenvolvimento iterativo
-            
-            📊 **Estrutura:**
-            - Dados temporais (2018-2025)
-            - Informações regionais (78 municípios do ES)
-            - Múltiplas modalidades de formação
-            - Indicadores de qualidade e impacto
-            
-            🔒 **Conformidade LGPD:**
-            - Apenas dados agregados
-            - Nenhuma informação individual
-            - Foco em estatísticas públicas
-            """)
-        
-        with col2:
-            st.markdown("""
-            **📅 Atualização:**
-            - Em tempo real
-            
-            **📁 Formatos:**
-            - JSON estruturado
-            - Pandas DataFrames
-            - APIs internas
-            """)
-    
-    # Metadados resumidos
-    # st.markdown("---")
-    # st.markdown("### 📊 Metadados das Bases de Dados")
-    
-    # metadados_resumo = pd.DataFrame({
-    #     'Campo': ['ano', 'municipio', 'regiao', 'modalidade', 'area_conhecimento', 'participantes', 'carga_horaria'],
-    #     'Tipo': ['Integer', 'String', 'String', 'String', 'String', 'Integer', 'Integer'],
-    #     'Descrição': ['Ano de referência', 'Nome do município', 'Região geográfica', 'Tipo de formação', 'Área do conhecimento', 'Número de participantes', 'Carga horária em horas'],
-    #     'Fonte': ['INEP', 'INEP', 'INEP', 'SEDU', 'SEDU', 'SEDU', 'SEDU']
-    # })
-    
-    # st.dataframe(metadados_resumo, width='stretch')
+            st.metric("Escolas", "3.970")
+        with col3:
+            st.metric("Cursos Técnicos", "584")
     
     st.markdown("---")
     st.markdown("""

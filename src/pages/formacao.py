@@ -36,7 +36,8 @@ def render_formacao():
                 dependencias = ["Todas"] + dependencia_df['Dependencia'].tolist()
                 dependencia_selecionada = st.selectbox(
                     "Dependência Administrativa",
-                    dependencias
+                    dependencias,
+                    key="dependencia_formacao"
                 )
             else:
                 dependencia_selecionada = "Todas"
@@ -48,7 +49,8 @@ def render_formacao():
                 localizacoes = ["Todas"] + localizacao_df['Localizacao'].tolist()
                 localizacao_selecionada = st.selectbox(
                     "Localização",
-                    localizacoes
+                    localizacoes,
+                    key="localizacao_formacao"
                 )
             else:
                 localizacao_selecionada = "Todas"
@@ -60,7 +62,8 @@ def render_formacao():
                 municipios = ["Todos"] + municipios_df['Municipio'].tolist()
                 municipio_selecionado = st.selectbox(
                     "Município",
-                    municipios
+                    municipios,
+                    key="municipio_formacao"
                 )
             else:
                 municipio_selecionado = "Todos"

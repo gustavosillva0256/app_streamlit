@@ -47,7 +47,8 @@ def render_estatisticas():
         with col1:
             municipio_selecionado = st.selectbox(
                 "Município",
-                municipios_lista
+                municipios_lista,
+                key="municipio_estatisticas"
             )
         
         with col2:
@@ -57,7 +58,8 @@ def render_estatisticas():
                 dependencias = ["Todas"] + dependencia_df['Dependencia'].tolist()
                 dependencia_selecionada = st.selectbox(
                     "Dependência Administrativa",
-                    dependencias
+                    dependencias,
+                    key="dependencia_estatisticas"
                 )
             else:
                 dependencia_selecionada = "Todas"
@@ -68,15 +70,41 @@ def render_estatisticas():
     
     st.markdown("---")
     
+    # Aplicar filtros aos dados
+    if municipios_df is not None:
+        # Filtrar por município selecionado
+        if municipio_selecionado != "Todos os Municípios":
+            municipios_filtrados = municipios_df[municipios_df['Municipio'] == municipio_selecionado].copy()
+        else:
+            municipios_filtrados = municipios_df.copy()
+        
+        # Filtrar por dependência se aplicável
+        if dependencia_selecionada != "Todas" and escolas_df is not None:
+            # Filtrar escolas por dependência
+            escolas_filtradas = escolas_df[escolas_df['TP_DEPENDENCIA_NOME'] == dependencia_selecionada]
+            if not escolas_filtradas.empty:
+                # Recalcular dados dos municípios baseado nas escolas filtradas
+                municipios_filtrados = escolas_filtradas.groupby('NO_MUNICIPIO').agg({
+                    'TOTAL_PROFESSORES': 'sum',
+                    'TOTAL_MATRICULAS': 'sum',
+                    'TOTAL_TURMAS': 'sum',
+                    'CO_ENTIDADE': 'count'
+                }).reset_index()
+                municipios_filtrados.columns = ['Municipio', 'Total_Professores', 'Total_Matriculas', 'Total_Turmas', 'Total_Escolas']
+        
+        # Mostrar informações do filtro aplicado
+        if municipio_selecionado != "Todos os Municípios" or dependencia_selecionada != "Todas":
+            st.info(f"🔍 Filtros aplicados: Município = {municipio_selecionado}, Dependência = {dependencia_selecionada}")
+    
     # Visão geral dos municípios
     st.subheader("📊 Visão Geral dos Municípios do ES")
     
     if municipios_df is not None:
-        # Calcular métricas gerais
-        total_professores = int(municipios_df['Total_Professores'].sum())
-        total_escolas = int(municipios_df['Total_Escolas'].sum())
-        total_matriculas = int(municipios_df['Total_Matriculas'].sum())
-        total_municipios = len(municipios_df)
+        # Calcular métricas gerais usando dados filtrados
+        total_professores = int(municipios_filtrados['Total_Professores'].sum())
+        total_escolas = int(municipios_filtrados['Total_Escolas'].sum())
+        total_matriculas = int(municipios_filtrados['Total_Matriculas'].sum())
+        total_municipios = len(municipios_filtrados)
         
         # Métricas gerais
         col1, col2, col3, col4 = st.columns(4)
@@ -123,8 +151,8 @@ def render_estatisticas():
         col1, col2 = st.columns(2)
         
         with col1:
-            # Top 15 municípios por número de professores
-            top_municipios = municipios_df.nlargest(15, 'Total_Professores')
+            # Top 15 municípios por número de professores (usando dados filtrados)
+            top_municipios = municipios_filtrados.nlargest(15, 'Total_Professores')
             
             fig = px.bar(
                 top_municipios,
@@ -144,8 +172,8 @@ def render_estatisticas():
             st.plotly_chart(fig, width='stretch')
         
         with col2:
-            # Distribuição de escolas por município
-            top_escolas = municipios_df.nlargest(15, 'Total_Escolas')
+            # Distribuição de escolas por município (usando dados filtrados)
+            top_escolas = municipios_filtrados.nlargest(15, 'Total_Escolas')
             
             fig = px.bar(
                 top_escolas,
