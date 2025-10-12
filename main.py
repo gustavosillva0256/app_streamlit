@@ -31,47 +31,52 @@ st.set_page_config(
 def main():
     """Função principal do aplicativo"""
     
-    # CSS customizado para garantir tema claro
+    # CSS customizado para garantir tema claro - v2.0
     st.markdown("""
     <style>
-    /* Tema claro - CSS limpo e eficiente */
+    /* Tema claro - CSS limpo e eficiente - Cache Clear v2.0 */
     .stApp {
-        background-color: #ffffff;
-        color: #262730;
+        background-color: #ffffff !important;
+        color: #262730 !important;
     }
     
-    /* Sidebar clara */
+    /* Sidebar clara - forçar */
     .stSidebar {
-        background-color: #f0f2f6;
+        background-color: #f0f2f6 !important;
     }
     
     /* Texto principal */
     .main .block-container {
-        background-color: #ffffff;
-        color: #262730;
+        background-color: #ffffff !important;
+        color: #262730 !important;
     }
     
     /* Headers */
     h1, h2, h3, h4, h5, h6 {
-        color: #262730;
+        color: #262730 !important;
     }
     
     /* Cards com borda sutil */
     .stMetric {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
+        background-color: #ffffff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 8px !important;
     }
     
     /* Tabelas */
     .stDataFrame {
-        background-color: #ffffff;
+        background-color: #ffffff !important;
     }
     
     /* Botões */
     .stButton > button {
-        background-color: #1f77b4;
-        color: white;
+        background-color: #1f77b4 !important;
+        color: white !important;
+    }
+    
+    /* Forçar tema claro no Streamlit Cloud */
+    .stApp > div {
+        background-color: #ffffff !important;
     }
     </style>
     """, unsafe_allow_html=True)
