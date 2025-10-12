@@ -31,93 +31,47 @@ st.set_page_config(
 def main():
     """Função principal do aplicativo"""
     
-    # CSS customizado para garantir tema claro com contraste
+    # CSS customizado para garantir tema claro
     st.markdown("""
     <style>
-    /* Forçar tema claro - CSS mais agressivo para Streamlit Cloud */
+    /* Tema claro - CSS limpo e eficiente */
     .stApp {
-        background-color: #ffffff !important;
-        color: #262730 !important;
+        background-color: #ffffff;
+        color: #262730;
     }
     
-    /* Sidebar clara - seletores mais específicos */
-    .stSidebar,
-    .css-1d391kg,
-    .css-1d391kg .css-1v0mbdj,
-    .stSidebar .css-1d391kg,
-    .stSidebar .css-1d391kg .css-1v0mbdj {
-        background-color: #f0f2f6 !important;
+    /* Sidebar clara */
+    .stSidebar {
+        background-color: #f0f2f6;
     }
     
-    /* Texto principal com contraste */
-    .main .block-container,
-    .main .block-container > div {
-        background-color: #ffffff !important;
-        color: #262730 !important;
+    /* Texto principal */
+    .main .block-container {
+        background-color: #ffffff;
+        color: #262730;
     }
     
-    /* Headers com contraste */
+    /* Headers */
     h1, h2, h3, h4, h5, h6 {
-        color: #262730 !important;
+        color: #262730;
     }
     
-    /* Texto padrão */
-    p, div, span, .stMarkdown {
-        color: #262730 !important;
+    /* Cards com borda sutil */
+    .stMetric {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
     }
     
-    /* Cards com borda para visibilidade */
-    .stMetric,
-    .stMetric > div {
-        background-color: #ffffff !important;
-        border: 1px solid #e0e0e0 !important;
-        color: #262730 !important;
-        padding: 10px !important;
-        border-radius: 8px !important;
-    }
-    
-    /* Tabelas com contraste */
-    .stDataFrame,
-    .stDataFrame table {
-        background-color: #ffffff !important;
-        color: #262730 !important;
+    /* Tabelas */
+    .stDataFrame {
+        background-color: #ffffff;
     }
     
     /* Botões */
     .stButton > button {
-        background-color: #1f77b4 !important;
-        color: white !important;
-    }
-    
-    /* Links do menu */
-    .css-1d391kg .css-1v0mbdj {
-        color: #262730 !important;
-        background-color: transparent !important;
-    }
-    
-    /* Menu selecionado */
-    .css-1d391kg .css-1v0mbdj[aria-selected="true"] {
-        background-color: #1f77b4 !important;
-        color: white !important;
-    }
-    
-    /* Forçar cor de fundo em todos os elementos */
-    * {
-        background-color: inherit !important;
-    }
-    
-    /* Específico para sidebar - mais agressivo */
-    .stSidebar * {
-        background-color: #f0f2f6 !important;
-    }
-    
-    /* Override para elementos específicos do Streamlit Cloud */
-    .stApp > div {
-        background-color: #ffffff !important;
-    }
-    
-    .stApp > div > div {
-        background-color: #ffffff !important;
+        background-color: #1f77b4;
+        color: white;
     }
     </style>
     """, unsafe_allow_html=True)
