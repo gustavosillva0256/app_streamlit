@@ -17,6 +17,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 from components.header import render_header
 from components.sidebar import render_sidebar
 from pages.dashboard import render_dashboard
+from pages.sobre import render_sobre
 from pages.formacao import render_formacao
 from pages.estatisticas import render_estatisticas
 from pages.evolucao import render_evolucao
@@ -148,6 +149,8 @@ def main():
     # Páginas
     if selected_page == "Dashboard":
         render_dashboard()
+    elif selected_page == "Sobre o Sistema":
+        render_sobre()
     elif selected_page == "Formação de Professores":
         render_formacao()
     elif selected_page == "Estatísticas por Região":

@@ -20,6 +20,7 @@ def render_sidebar():
             menu_title=None,
             options=[
                 "Dashboard",
+                "Sobre o Sistema",
                 "Formação de Professores", 
                 "Estatísticas por Região",
                 "Evolução Temporal",
@@ -27,6 +28,7 @@ def render_sidebar():
             ],
             icons=[
                 "house-fill",
+                "info-circle-fill",
                 "mortarboard-fill", 
                 "geo-alt-fill",
                 "graph-up",
