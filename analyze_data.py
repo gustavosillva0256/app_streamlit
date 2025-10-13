@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Script para analisar os dados do INEP e identificar informações relevantes para CEFOPE
+Script para analisar os dados do INEP e identificar informações relevantes para Sistema de Análise Educacional - ES
 """
 
 import pandas as pd
 import numpy as np
 
 def analyze_inep_data():
-    """Analisa os dados do INEP para identificar informações relevantes para CEFOPE"""
+    """Analisa os dados do INEP para identificar informações relevantes para Sistema de Análise Educacional - ES"""
     
     print("🔍 Analisando dados do INEP...")
     
@@ -104,7 +104,7 @@ def analyze_technical_courses():
         return None, None
 
 if __name__ == "__main__":
-    print("🚀 Iniciando análise dos dados do INEP para CEFOPE")
+    print("🚀 Iniciando análise dos dados do INEP para Sistema de Análise Educacional - ES")
     print("=" * 60)
     
     # Analisar dados principais

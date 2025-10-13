@@ -11,7 +11,7 @@ import numpy as np
 def render_formacao():
     """Renderiza a página de formação de professores"""
     
-    st.title("🎓 Formação de Professores - CEFOPE")
+    st.title("🎓 Formação de Professores - ES")
     st.markdown("Análise detalhada do fluxo educacional e programas de formação - Dados Reais 2024")
     
     # Carregar dados reais

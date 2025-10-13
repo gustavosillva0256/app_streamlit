@@ -1,5 +1,5 @@
 """
-Módulo de utilitários do aplicativo CEFOPE
+Módulo de utilitários do aplicativo Sistema de Análise Educacional - ES
 """
 
 from .data_helpers import *

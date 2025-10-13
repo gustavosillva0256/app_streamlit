@@ -10,9 +10,9 @@ def render_header():
     # Cabeçalho principal
     st.markdown("""
     <div style="text-align: center; padding: 1rem; background: linear-gradient(90deg, #1f77b4, #ff7f0e); border-radius: 10px; margin-bottom: 2rem;">
-        <h1 style="color: white; margin: 0; font-size: 2.5rem;">📚 CEFOPE</h1>
-        <h2 style="color: white; margin: 0; font-size: 1.5rem;">Fluxo de Formação de Professores</h2>
-        <p style="color: white; margin: 0.5rem 0 0 0; font-size: 1rem;">Análise e Visualização de Dados Educacionais</p>
+        <h1 style="color: white; margin: 0; font-size: 2.5rem;">📚 Sistema de Análise Educacional - ES</h1>
+        <h2 style="color: white; margin: 0; font-size: 1.5rem;">Dados Educacionais do Espírito Santo</h2>
+        <p style="color: white; margin: 0.5rem 0 0 0; font-size: 1rem;">Análise e Visualização de Dados do INEP</p>
     </div>
     """, unsafe_allow_html=True)
     

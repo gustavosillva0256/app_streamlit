@@ -1,4 +1,4 @@
-# 🚀 Instruções de Deploy - App CEFOPE
+# 🚀 Instruções de Deploy - Sistema de Análise Educacional - ES
 
 ## 📋 Pré-requisitos
 
@@ -28,7 +28,7 @@ app_streamlit/
 ### 2. Commit e Push
 ```bash
 git add .
-git commit -m "Versão 1.0.0 - App CEFOPE completo"
+git commit -m "Versão 1.0.0 - Sistema de Análise Educacional - ES completo"
 git push origin main
 ```
 
@@ -161,6 +161,6 @@ Se encontrar problemas:
 
 ---
 
-**🎉 Parabéns! Seu app CEFOPE está no ar!**
+**🎉 Parabéns! Seu Sistema de Análise Educacional - ES está no ar!**
 
 Compartilhe o link com seus colegas e professores para demonstrar seu trabalho.

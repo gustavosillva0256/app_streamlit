@@ -11,7 +11,7 @@ import numpy as np
 def render_comparativos():
     """Renderiza a página de análises comparativas"""
     
-    st.title("📊 Análises Comparativas - CEFOPE")
+    st.title("📊 Análises Comparativas - ES")
     st.markdown("Comparações entre diferentes períodos, regiões e indicadores educacionais - Dados Reais 2024")
     
     # Carregar dados reais
@@ -491,17 +491,17 @@ def render_comparacao_benchmark():
     # Seleção de benchmark
     benchmark = st.selectbox(
         "Selecione o benchmark",
-        ["Média Nacional", "Top 10% das Instituições", "Padrão Internacional", "Meta CEFOPE 2030"]
+        ["Média Nacional", "Top 10% das Instituições", "Padrão Internacional", "Meta ES 2030"]
     )
     
     # Dados simulados de benchmark
     dados_benchmark = {
         "Indicador": ["Taxa de Conclusão", "Satisfação dos Alunos", "Empregabilidade", "Qualidade dos Cursos"],
-        "CEFOPE Atual": [91.2, 4.6, 95.8, 4.5],
+        "ES Atual": [91.2, 4.6, 95.8, 4.5],
         "Média Nacional": [87.3, 4.2, 92.1, 4.1],
         "Top 10%": [94.8, 4.8, 97.3, 4.7],
         "Padrão Internacional": [89.5, 4.4, 94.2, 4.3],
-        "Meta CEFOPE 2030": [95.0, 4.8, 98.0, 4.8]
+        "Meta ES 2030": [95.0, 4.8, 98.0, 4.8]
     }
     
     df_benchmark = pd.DataFrame(dados_benchmark)
@@ -511,21 +511,21 @@ def render_comparacao_benchmark():
     st.subheader("🎯 Radar Chart vs Benchmark")
     
     indicadores_bench = df_benchmark["Indicador"].tolist()
-    valores_cefope = df_benchmark["CEFOPE Atual"].tolist()
+    valores_es = df_benchmark["ES Atual"].tolist()
     valores_bench = df_benchmark[benchmark].tolist()
     
     # Normalizando valores
-    max_valor = max(max(valores_cefope), max(valores_bench))
-    valores_norm_cefope = [(v / max_valor) * 100 for v in valores_cefope]
+    max_valor = max(max(valores_es), max(valores_bench))
+    valores_norm_es = [(v / max_valor) * 100 for v in valores_es]
     valores_norm_bench = [(v / max_valor) * 100 for v in valores_bench]
     
     fig = go.Figure()
     
     fig.add_trace(go.Scatterpolar(
-        r=valores_norm_cefope,
+        r=valores_norm_es,
         theta=indicadores_bench,
         fill='toself',
-        name='CEFOPE Atual',
+        name='ES Atual',
         line_color='#1f77b4'
     ))
     
@@ -544,7 +544,7 @@ def render_comparacao_benchmark():
                 range=[0, 100]
             )),
         showlegend=True,
-        title=f"CEFOPE vs {benchmark}"
+        title=f"ES vs {benchmark}"
     )
     
     st.plotly_chart(fig, width='stretch')
@@ -555,12 +555,12 @@ def render_comparacao_benchmark():
     
     gaps = []
     for i in range(len(indicadores_bench)):
-        gap = valores_cefope[i] - valores_bench[i]
+        gap = valores_es[i] - valores_bench[i]
         gaps.append(gap)
     
     df_gaps = pd.DataFrame({
         "Indicador": indicadores_bench,
-        "CEFOPE": valores_cefope,
+        "ES": valores_es,
         benchmark: valores_bench,
         "Gap": gaps,
         "Status": ["Acima" if g > 0 else "Abaixo" if g < 0 else "Alinhado" for g in gaps]
@@ -572,7 +572,7 @@ def render_comparacao_benchmark():
         x="Indicador",
         y="Gap",
         color="Status",
-        title=f"Gap de Performance: CEFOPE vs {benchmark}",
+        title=f"Gap de Performance: ES vs {benchmark}",
         color_discrete_map={"Acima": "#28a745", "Abaixo": "#dc3545", "Alinhado": "#6c757d"}
     )
     fig.update_layout(
@@ -585,7 +585,7 @@ def render_comparacao_benchmark():
     st.subheader("📋 Resumo dos Gaps")
     st.dataframe(
         df_gaps.style.format({
-            "CEFOPE": "{:.1f}",
+            "ES": "{:.1f}",
             benchmark: "{:.1f}",
             "Gap": "{:+.1f}"
         }),
@@ -600,7 +600,7 @@ def render_comparacao_benchmark():
     gaps_negativos = sum(1 for g in gaps if g < 0)
     
     if gaps_positivos > gaps_negativos:
-        st.success("🎉 **Excelente!** O CEFOPE está superando o benchmark na maioria dos indicadores.")
+        st.success("🎉 **Excelente!** O ES está superando o benchmark na maioria dos indicadores.")
         st.markdown("**Recomendações:**")
         st.markdown("- Manter as práticas que estão gerando resultados superiores")
         st.markdown("- Compartilhar melhores práticas com outras instituições")
@@ -612,7 +612,7 @@ def render_comparacao_benchmark():
         st.markdown("- Desenvolver planos de ação específicos")
         st.markdown("- Implementar melhorias baseadas em benchmarks")
     else:
-        st.info("ℹ️ **Equilibrado!** O CEFOPE está alinhado com o benchmark.")
+        st.info("ℹ️ **Equilibrado!** O ES está alinhado com o benchmark.")
         st.markdown("**Recomendações:**")
         st.markdown("- Manter o equilíbrio atual")
         st.markdown("- Identificar oportunidades de crescimento")

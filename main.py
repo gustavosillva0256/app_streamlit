@@ -2,9 +2,9 @@
 cache_clear_version = "2025-10-12-19-00-00"
 
 """
-📚 App Streamlit - Fluxo de Formação de Professores (CEFOPE)
+📚 App Streamlit - Sistema de Análise Educacional - ES
 👨‍💻 Desenvolvedor: Gustavo Pereira
-🎯 Tema: Análise do fluxo de formação de professores através do CEFOPE
+🎯 Tema: Análise de dados educacionais do Espírito Santo
 """
 
 import streamlit as st
@@ -27,7 +27,7 @@ from pages.comparativos import render_comparativos
 # ⚙️ Configuração da Página
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="CEFOPE - Formação de Professores",
+    page_title="Sistema de Análise Educacional - ES",
     page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded"

@@ -119,7 +119,7 @@ def load_es_technical_courses():
         return None
 
 if __name__ == "__main__":
-    print("🚀 Carregando dados do Espírito Santo para CEFOPE")
+    print("🚀 Carregando dados do Espírito Santo para Sistema de Análise Educacional")
     print("=" * 60)
     
     # Carregar dados principais do ES

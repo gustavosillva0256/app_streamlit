@@ -1,10 +1,10 @@
-# 📚 App Streamlit - CEFOPE
+# 📚 App Streamlit - Sistema de Análise Educacional - ES
 
 ## 👨‍💻 Desenvolvedor
 **Gustavo Pereira** - Projeto Acadêmico de Análise de Dados Educacionais
 
 ## 🎯 Tema do Projeto
-**Fluxo de Formação de Professores (CEFOPE)** - Análise e visualização do fluxo de formação continuada de professores no Espírito Santo através do Centro de Formação Continuada dos Profissionais da Educação.
+**Sistema de Análise Educacional do Espírito Santo** - Análise e visualização de dados educacionais do Espírito Santo com dados oficiais do INEP/Censo Escolar 2024.
 
 ## 🏗️ Arquitetura do Projeto
 
@@ -78,7 +78,7 @@ app_streamlit/
   - Sinopse Estatística: Resumos consolidados e séries históricas
 - **SEDU (Secretaria de Estado da Educação)**
   - Relatórios públicos de gestão
-  - Dados sobre programas CEFOPE
+  - Dados sobre programas educacionais
   - Indicadores de desempenho e qualidade
 - **Dados Simulados**
   - Dados para desenvolvimento e testes

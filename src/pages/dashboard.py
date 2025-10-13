@@ -1,5 +1,5 @@
 """
-Página do Dashboard Principal - CEFOPE
+Página do Dashboard Principal - Sistema de Análise Educacional - ES
 """
 import streamlit as st
 import pandas as pd
@@ -9,7 +9,7 @@ from plotly.subplots import make_subplots
 import numpy as np
 
 def render_dashboard():
-    st.markdown("## 🏠 Dashboard Principal - CEFOPE")
+    st.markdown("## 🏠 Dashboard Principal - Sistema de Análise Educacional")
     st.markdown("---")
     
     # Carregar dados reais
@@ -21,8 +21,8 @@ def render_dashboard():
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 15px; margin-bottom: 2rem; color: white;">
         <h3 style="color: white; margin: 0 0 1rem 0;">📚 Sobre o Projeto</h3>
         <p style="font-size: 1.1rem; margin: 0 0 1rem 0; line-height: 1.6;">
-            <strong>Fluxo de Formação de Professores no Espírito Santo</strong><br>
-            Monitoramento, análise e previsão de indicadores da formação continuada através do CEFOPE.
+            <strong>Análise de Dados Educacionais do Espírito Santo</strong><br>
+            Monitoramento, análise e visualização de indicadores educacionais com dados oficiais do INEP.
         </p>
         <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
             <h4 style="color: white; margin: 0 0 0.5rem 0;">🗄️ Fonte dos Dados</h4>
@@ -526,8 +526,8 @@ def render_dashboard():
     st.markdown("""
     <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center;">
         <p style="margin: 0; color: #666;">
-            <strong>📚 CEFOPE - Centro de Formação Continuada dos Profissionais da Educação</strong><br>
-            Projeto acadêmico desenvolvido por Gustavo Pereira para análise da educação brasileira
+            <strong>📚 Sistema de Análise Educacional - ES</strong><br>
+            Projeto acadêmico desenvolvido por Gustavo Pereira para análise de dados educacionais do Brasil
         </p>
     </div>
     """, unsafe_allow_html=True)

@@ -1,5 +1,5 @@
 """
-Página de Bases de Dados - CEFOPE
+Página de Bases de Dados - Sistema de Análise Educacional - ES
 """
 import streamlit as st
 import pandas as pd
@@ -102,7 +102,7 @@ def render_bases_dados():
             - Dados sobre programas de formação continuada
             - Estatísticas de cursos e capacitações
             
-            🎯 **Programas CEFOPE**
+            🎯 **Programas Educacionais**
             - Dados sobre cursos oferecidos
             - Informações sobre participantes
             - Metas e resultados alcançados

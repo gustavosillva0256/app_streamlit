@@ -56,7 +56,7 @@ def render_sidebar():
         # <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-top: 1rem;">
         #     <h4 style="color: #1f77b4; margin: 0 0 0.5rem 0;">📊 Sobre o Projeto</h4>
         #     <p style="font-size: 0.8rem; color: #666; margin: 0;">
-        #         Este aplicativo analisa o fluxo de formação de professores através do CEFOPE, 
+        #         Este aplicativo analisa dados educacionais do Espírito Santo com dados oficiais do INEP, 
         #         fornecendo insights sobre a educação brasileira.
         #     </p>
         # </div>

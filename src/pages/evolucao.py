@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 def render_evolucao():
     """Renderiza a página de evolução temporal"""
     
-    st.title("📈 Evolução Temporal - CEFOPE")
+    st.title("📈 Evolução Temporal - ES")
     st.markdown("Análise de tendências e evolução dos indicadores ao longo do tempo - Dados Reais 2024")
     
     # Carregar dados reais
@@ -312,7 +312,7 @@ def render_evolucao():
     st.markdown("""
     **Principais insights da análise temporal:**
     
-    📈 **Crescimento Consistente**: O CEFOPE apresenta crescimento sustentado de 
+    📈 **Crescimento Consistente**: O sistema educacional apresenta crescimento sustentado de 
     aproximadamente 8-10% ao ano, indicando forte demanda e qualidade reconhecida.
     
     🎯 **Sazonalidade Identificada**: Existe padrão sazonal claro com picos em 

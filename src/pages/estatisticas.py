@@ -11,7 +11,7 @@ import numpy as np
 def render_estatisticas():
     """Renderiza a página de estatísticas por região"""
     
-    st.title("🗺️ Estatísticas por Região - CEFOPE")
+    st.title("🗺️ Estatísticas por Região - ES")
     st.markdown("Análise geográfica da educação no Espírito Santo - Dados Reais 2024")
     
     # Carregar dados reais
