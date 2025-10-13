@@ -3,7 +3,6 @@ cache_clear_version = "2025-10-12-19-00-00"
 
 """
 📚 App Streamlit - Sistema de Análise Educacional - ES
-👨‍💻 Desenvolvedor: Gustavo Pereira
 🎯 Tema: Análise de dados educacionais do Espírito Santo
 """
 
